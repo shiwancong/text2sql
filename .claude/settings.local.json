@@ -1,0 +1,39 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(dir:*)",
+      "mcp__jina__primer",
+      "Bash(java:*)",
+      "Bash(ping:*)",
+      "Bash(python:*)",
+      "mcp__oracle__describe_table",
+      "mcp__oracle__execute_query",
+      "mcp__oracle__list_tables",
+      "mcp__ragflow__search",
+      "mcp__ragflow__get_schema",
+      "mcp__ragflow__get_examples",
+      "mcp__ragflow__sync_knowledge",
+      "mcp__ragflow__health",
+      "Bash(tree:*)",
+      "Bash(ls:*)",
+      "WebSearch",
+      "mcp__jina__read_url",
+      "Bash(git clone:*)",
+      "Bash(docker:*)",
+      "Bash(docker compose:*)",
+      "Bash(pip install:*)",
+      "Bash(where:*)",
+      "Bash(chcp:*)",
+      "Bash(nc:*)",
+      "Bash(tasklist:*)",
+      "Bash(findstr /i \"python\")",
+      "Bash(findstr:*)",
+      "mcp__jina__search_web"
+    ]
+  },
+  "enableAllProjectMcpServers": true,
+  "enabledMcpjsonServers": [
+    "oracle",
+    "ragflow"
+  ]
+}

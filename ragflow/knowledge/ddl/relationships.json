@@ -1,0 +1,2326 @@
+[
+  {
+    "from_table": "HQ_JC_XX",
+    "from_column": "ORIGIN_PID",
+    "to_table": "HQ_CODE_XZQH",
+    "to_column": "ID",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_JC_XX",
+    "from_column": "ORIGIN_ID",
+    "to_table": "HQ_CODE_XZQH",
+    "to_column": "ID",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_JC_XX",
+    "from_column": "XX_BXLX_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_JC_XX",
+    "from_column": "XX_XZLB_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_JC_XX",
+    "from_column": "XX_JBZXX_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_JC_XX",
+    "from_column": "XX_JBZJB_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_JC_XX",
+    "from_column": "JYXZBM_ORIGIN_ID",
+    "to_table": "HQ_CODE_XZQH",
+    "to_column": "ID",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_JC_XX",
+    "from_column": "FR_TEA_NO",
+    "to_table": "HQ_RS_TEA",
+    "to_column": "TEA_NO",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_JC_XX_RY",
+    "from_column": "XXRY_GRADE_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_JC_XX_RY",
+    "from_column": "XXRY_TYPE_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_CODE_DEPT",
+    "from_column": "PID",
+    "to_table": "HQ_CODE_DEPT",
+    "to_column": "ID",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_CODE_DEPT_JYS",
+    "from_column": "DEPT_ID",
+    "to_table": "HQ_CODE_DEPT",
+    "to_column": "ID",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_CODE_DEPT_JYS_CY",
+    "from_column": "JYS_ID",
+    "to_table": "HQ_CODE_DEPT_JYS",
+    "to_column": "ID",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_CODE_DEPT_JYS_CY",
+    "from_column": "TEA_NO",
+    "to_table": "HQ_RS_TEA",
+    "to_column": "TEA_NO",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_CODE_CLASSES",
+    "from_column": "MAJOR_CODE",
+    "to_table": "HQ_CODE_MAJOR",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_CODE_CLASSES",
+    "from_column": "PYCC_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_CODE_CLASSES",
+    "from_column": "NOW_PYCC_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_JC_JS_ZZJG",
+    "from_column": "JSLX_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_TEA",
+    "from_column": "ZZJG_ID",
+    "to_table": "HQ_CODE_DEPT",
+    "to_column": "ID",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_TEA",
+    "from_column": "DEPT_ID",
+    "to_table": "HQ_CODE_DEPT",
+    "to_column": "ID",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_TEA",
+    "from_column": "TEA_STATUS_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_TEA",
+    "from_column": "JZGLB_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_TEA",
+    "from_column": "BZLB_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_TEA",
+    "from_column": "BZLX_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_TEA",
+    "from_column": "SEX_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_TEA",
+    "from_column": "ZWCC_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_TEA",
+    "from_column": "ZWJB_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_TEA",
+    "from_column": "GZGWXZ_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_TEA",
+    "from_column": "JZGLY_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_TEA",
+    "from_column": "NATION_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_TEA",
+    "from_column": "POLITICS_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_TEA",
+    "from_column": "GWJB_ID",
+    "to_table": "HQ_CODE_GWJB",
+    "to_column": "ID",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_TEA",
+    "from_column": "GLGW_GWJB_ID",
+    "to_table": "HQ_CODE_GWJB",
+    "to_column": "ID",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_TEA",
+    "from_column": "ZJGW_GWJB_ID",
+    "to_table": "HQ_CODE_GWJB",
+    "to_column": "ID",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_TEA",
+    "from_column": "GQGW_GWJB_ID",
+    "to_table": "HQ_CODE_GWJB",
+    "to_column": "ID",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_TEA",
+    "from_column": "XQ_ID",
+    "to_table": "HQ_JC_JS_ZZJG",
+    "to_column": "ID",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_TEA",
+    "from_column": "EDU_ID",
+    "to_table": "HQ_CODE_EDUCATION",
+    "to_column": "ID",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_TEA",
+    "from_column": "DEGREE_ID",
+    "to_table": "HQ_CODE_DEGREE",
+    "to_column": "ID",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_TEA",
+    "from_column": "EDU_FIRST_ID",
+    "to_table": "HQ_CODE_education",
+    "to_column": "ID",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_TEA",
+    "from_column": "DEGREE_FIRST_ID",
+    "to_table": "HQ_CODE_DEGREE",
+    "to_column": "ID",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_TEA",
+    "from_column": "ZYJSZW_ID",
+    "to_table": "HQ_CODE_ZYJSZW",
+    "to_column": "ID",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_TEA",
+    "from_column": "SKILL_MOVES_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_TEA",
+    "from_column": "RKJSLX_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_TEA",
+    "from_column": "JXMS_LEVEL_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_TEA",
+    "from_column": "GGJS_LEVEL_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_TEA",
+    "from_column": "XSJSDTR_LEVEL_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_PHOTO",
+    "from_column": "TEA_NO",
+    "to_table": "HQ_RS_TEA",
+    "to_column": "TEA_NO",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_TEA_YEAR",
+    "from_column": "ZZJG_ID",
+    "to_table": "HQ_CODE_DEPT",
+    "to_column": "ID",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_TEA_YEAR",
+    "from_column": "DEPT_ID",
+    "to_table": "HQ_CODE_DEPT",
+    "to_column": "ID",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_TEA_YEAR",
+    "from_column": "TEA_STATUS_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_TEA_YEAR",
+    "from_column": "JZGLB_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_TEA_YEAR",
+    "from_column": "BZLB_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_TEA_YEAR",
+    "from_column": "BZLX_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_TEA_YEAR",
+    "from_column": "SEX_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_TEA_YEAR",
+    "from_column": "ZWCC_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_TEA_YEAR",
+    "from_column": "ZWJB_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_TEA_YEAR",
+    "from_column": "GZGWXZ_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_TEA_YEAR",
+    "from_column": "JZGLY_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_TEA_YEAR",
+    "from_column": "NATION_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_TEA_YEAR",
+    "from_column": "POLITICS_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_TEA_YEAR",
+    "from_column": "GWJB_ID",
+    "to_table": "HQ_CODE_gwjb",
+    "to_column": "ID",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_TEA_YEAR",
+    "from_column": "GLGW_GWJB_ID",
+    "to_table": "HQ_CODE_gwjb",
+    "to_column": "ID",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_TEA_YEAR",
+    "from_column": "ZJGW_GWJB_ID",
+    "to_table": "HQ_CODE_gwjb",
+    "to_column": "ID",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_TEA_YEAR",
+    "from_column": "GQGW_GWJB_ID",
+    "to_table": "HQ_CODE_gwjb",
+    "to_column": "ID",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_TEA_YEAR",
+    "from_column": "XQ_ID",
+    "to_table": "HQ_JC_JS_ZZJG",
+    "to_column": "ID",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_TEA_YEAR",
+    "from_column": "EDU_ID",
+    "to_table": "HQ_CODE_education",
+    "to_column": "ID",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_TEA_YEAR",
+    "from_column": "DEGREE_ID",
+    "to_table": "HQ_CODE_degree",
+    "to_column": "ID",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_TEA_YEAR",
+    "from_column": "EDU_FIRST_ID",
+    "to_table": "HQ_CODE_education",
+    "to_column": "ID",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_TEA_YEAR",
+    "from_column": "DEGREE_FIRST_ID",
+    "to_table": "HQ_CODE_degree",
+    "to_column": "ID",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_TEA_YEAR",
+    "from_column": "ZYJSZW_ID",
+    "to_table": "HQ_CODE_zyjszw",
+    "to_column": "ID",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_TEA_YEAR",
+    "from_column": "SKILL_MOVES_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_TEA_YEAR",
+    "from_column": "RKJSLX_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_TEA_YEAR",
+    "from_column": "JXMS_LEVEL_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_TEA_YEAR",
+    "from_column": "GGJS_LEVEL_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_TEA_YEAR",
+    "from_column": "XSJSDTR_LEVEL_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_TEA_XQ",
+    "from_column": "ZZJG_ID",
+    "to_table": "HQ_CODE_DEPT",
+    "to_column": "ID",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_TEA_XQ",
+    "from_column": "DEPT_ID",
+    "to_table": "HQ_CODE_DEPT",
+    "to_column": "ID",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_TEA_XQ",
+    "from_column": "TEA_STATUS_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_TEA_XQ",
+    "from_column": "JZGLB_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_TEA_XQ",
+    "from_column": "BZLB_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_TEA_XQ",
+    "from_column": "BZLX_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_TEA_XQ",
+    "from_column": "SEX_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_TEA_XQ",
+    "from_column": "ZWCC_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_TEA_XQ",
+    "from_column": "ZWJB_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_TEA_XQ",
+    "from_column": "GZGWXZ_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_TEA_XQ",
+    "from_column": "JZGLY_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_TEA_XQ",
+    "from_column": "NATION_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_TEA_XQ",
+    "from_column": "POLITICS_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_TEA_XQ",
+    "from_column": "GWJB_ID",
+    "to_table": "HQ_CODE_gwjb",
+    "to_column": "ID",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_TEA_XQ",
+    "from_column": "GLGW_GWJB_ID",
+    "to_table": "HQ_CODE_gwjb",
+    "to_column": "ID",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_TEA_XQ",
+    "from_column": "ZJGW_GWJB_ID",
+    "to_table": "HQ_CODE_gwjb",
+    "to_column": "ID",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_TEA_XQ",
+    "from_column": "GQGW_GWJB_ID",
+    "to_table": "HQ_CODE_gwjb",
+    "to_column": "ID",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_TEA_XQ",
+    "from_column": "XQ_ID",
+    "to_table": "HQ_JC_JS_ZZJG",
+    "to_column": "ID",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_TEA_XQ",
+    "from_column": "EDU_ID",
+    "to_table": "HQ_CODE_education",
+    "to_column": "ID",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_TEA_XQ",
+    "from_column": "DEGREE_ID",
+    "to_table": "HQ_CODE_degree",
+    "to_column": "ID",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_TEA_XQ",
+    "from_column": "EDU_FIRST_ID",
+    "to_table": "HQ_CODE_education",
+    "to_column": "ID",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_TEA_XQ",
+    "from_column": "DEGREE_FIRST_ID",
+    "to_table": "HQ_CODE_degree",
+    "to_column": "ID",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_TEA_XQ",
+    "from_column": "ZYJSZW_ID",
+    "to_table": "HQ_CODE_zyjszw",
+    "to_column": "ID",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_TEA_XQ",
+    "from_column": "SKILL_MOVES_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_TEA_XQ",
+    "from_column": "RKJSLX_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_TEA_XQ",
+    "from_column": "JXMS_LEVEL_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_TEA_XQ",
+    "from_column": "GGJS_LEVEL_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_TEA_XQ",
+    "from_column": "XSJSDTR_LEVEL_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_TEA_MAJOR_YEAR",
+    "from_column": "MAJOR_CODE",
+    "to_table": "HQ_CODE_MAJOR",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_TEA_MAJOR_YEAR",
+    "from_column": "TEA_NO",
+    "to_table": "HQ_RS_TEA",
+    "to_column": "TEA_NO",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_TEA_MAJOR_XN",
+    "from_column": "MAJOR_CODE",
+    "to_table": "HQ_CODE_MAJOR",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_TEA_MAJOR_XN",
+    "from_column": "TEA_NO",
+    "to_table": "HQ_RS_TEA",
+    "to_column": "TEA_NO",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_CHANGE",
+    "from_column": "TEA_NO",
+    "to_table": "HQ_CODE_DEPT",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_CHANGE",
+    "from_column": "TEA_STATUS_CHANGE_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_YPFP",
+    "from_column": "TEA_NO",
+    "to_table": "HQ_RS_TEA",
+    "to_column": "TEA_NO",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_YPFP",
+    "from_column": "YPFP_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_TAKE_OFFICE",
+    "from_column": "TEA_NO",
+    "to_table": "HQ_RS_TEA",
+    "to_column": "TEA_NO",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_TAKE_OFFICE",
+    "from_column": "DEPT_ID",
+    "to_table": "HQ_CODE_DEPT",
+    "to_column": "ID",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_TAKE_OFFICE",
+    "from_column": "KS_ID",
+    "to_table": "HQ_CODE_DEPT",
+    "to_column": "ID",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_EDU_DEGREE_CHANGE",
+    "from_column": "TEA_NO",
+    "to_table": "HQ_RS_TEA",
+    "to_column": "TEA_NO",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_EDU_DEGREE_CHANGE",
+    "from_column": "EDU_ID",
+    "to_table": "HQ_CODE_EDUCATION",
+    "to_column": "ID",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_EDU_DEGREE_CHANGE",
+    "from_column": "DEGREE_ID",
+    "to_table": "HQ_CODE_DEGREE",
+    "to_column": "ID",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_ZYJSZW_CHANGE",
+    "from_column": "TEA_NO",
+    "to_table": "HQ_RS_TEA",
+    "to_column": "TEA_NO",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_ZYJSZW_CHANGE",
+    "from_column": "ZYJSZW_ID",
+    "to_table": "HQ_CODE_ZYJSZW",
+    "to_column": "ID",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_ZYJSZW_CHANGE",
+    "from_column": "ZYJSZW_JB_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_FDYBZR",
+    "from_column": "TEA_NO",
+    "to_table": "HQ_RS_TEA",
+    "to_column": "TEA_NO",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_FDYBZR",
+    "from_column": "FDYBZR_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_FDYBZR_CLASS",
+    "from_column": "FDYBZR_ID",
+    "to_table": "HQ_RS_FDYBZR",
+    "to_column": "ID",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_FDYBZR_CLASS",
+    "from_column": "CLASS_ID",
+    "to_table": "HQ_CODE_CLASSES",
+    "to_column": "ID",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_HONOR_RES",
+    "from_column": "DEPT_ID",
+    "to_table": "HQ_CODE_DEPT",
+    "to_column": "ID",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_HONOR_RES",
+    "from_column": "JYS_ID",
+    "to_table": "HQ_CODE_DEPT_JYS",
+    "to_column": "ID",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_HONOR_RES",
+    "from_column": "HONOR_RES_PID_ID",
+    "to_table": "HQ_CODE_HONOR_RES",
+    "to_column": "ID",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_HONOR_RES",
+    "from_column": "HONOR_RES_ID",
+    "to_table": "HQ_CODE_HONOR_RES",
+    "to_column": "ID",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_HONOR_RES",
+    "from_column": "HJR_NO",
+    "to_table": "HQ_RS_TEA",
+    "to_column": "TEA_NO",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_HONOR_RES_CY",
+    "from_column": "HONOR_RES_ID",
+    "to_table": "HQ_RS_HONOR_RES",
+    "to_column": "ID",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_HONOR_RES_CY",
+    "from_column": "PERSON_TYPE_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_HONOR_RES_CY",
+    "from_column": "DEPT_ID",
+    "to_table": "HQ_CODE_DEPT",
+    "to_column": "ID",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_HONOR_RES_CY",
+    "from_column": "TEA_NO",
+    "to_table": "HQ_RS_TEA",
+    "to_column": "TEA_NO",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_HONOR_RES_CY",
+    "from_column": "STU_NO",
+    "to_table": "HQ_XS_STU",
+    "to_column": "STU_NO",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_HONOR_RES_JOINDEPT",
+    "from_column": "HONOR_RES_ID",
+    "to_table": "HQ_RS_HONOR_RES",
+    "to_column": "ID",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_HONOR_RES_JOINDEPT",
+    "from_column": "DEPT_ID",
+    "to_table": "HQ_CODE_DEPT",
+    "to_column": "ID",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_HONOR_RES_JOINDEPT",
+    "from_column": "JYS_ID",
+    "to_table": "HQ_CODE_DEPT_JYS",
+    "to_column": "ID",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_TEACH_RES",
+    "from_column": "DEPT_ID",
+    "to_table": "HQ_CODE_DEPT",
+    "to_column": "ID",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_TEACH_RES",
+    "from_column": "JYS_ID",
+    "to_table": "HQ_CODE_DEPT_JYS",
+    "to_column": "ID",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_TEACH_RES",
+    "from_column": "TEACH_RES_PID_ID",
+    "to_table": "HQ_CODE_TEACH_RES",
+    "to_column": "ID",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_TEACH_RES",
+    "from_column": "TEACH_RES_ID",
+    "to_table": "HQ_CODE_TEACH_RES",
+    "to_column": "ID",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_TEACH_RES",
+    "from_column": "TEACH_RES_GRAND_ID",
+    "to_table": "HQ_CODE_TEACH_RES_GRADE",
+    "to_column": "ID",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_TEACH_RES",
+    "from_column": "FZR_NO",
+    "to_table": "HQ_RS_TEA",
+    "to_column": "TEA_NO",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_TEACH_RES",
+    "from_column": "HJR_NO",
+    "to_table": "HQ_RS_TEA",
+    "to_column": "TEA_NO",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_TEACH_RES",
+    "from_column": "TEACH_RES_LEVEL_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_TEACH_RES",
+    "from_column": "TEACH_RES_LEVEL_TYPE_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_TEACH_RES",
+    "from_column": "TEACH_RES_GRAND_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_TEACH_RES_CY",
+    "from_column": "TEACH_RES_ID",
+    "to_table": "HQ_RS_TEACH_RES",
+    "to_column": "ID",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_TEACH_RES_CY",
+    "from_column": "PERSON_TYPE_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_TEACH_RES_CY",
+    "from_column": "DEPT_ID",
+    "to_table": "HQ_CODE_DEPT",
+    "to_column": "ID",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_TEACH_RES_CY",
+    "from_column": "TEA_NO",
+    "to_table": "HQ_RS_TEA",
+    "to_column": "TEA_NO",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_TEACH_RES_CY",
+    "from_column": "STU_NO",
+    "to_table": "HQ_XS_STU",
+    "to_column": "STU_NO",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_TEACH_RES_JOINDEPT",
+    "from_column": "TEACH_RES_ID",
+    "to_table": "HQ_RS_TEACH_RES",
+    "to_column": "ID",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_TEACH_RES_JOINDEPT",
+    "from_column": "DEPT_ID",
+    "to_table": "HQ_CODE_DEPT",
+    "to_column": "ID",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_TEACH_RES_JOINDEPT",
+    "from_column": "JYS_ID",
+    "to_table": "HQ_CODE_DEPT_JYS",
+    "to_column": "ID",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_HONOR",
+    "from_column": "DEPT_ID",
+    "to_table": "HQ_CODE_DEPT",
+    "to_column": "ID",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_HONOR",
+    "from_column": "JYS_ID",
+    "to_table": "HQ_CODE_DEPT_JYS",
+    "to_column": "ID",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_HONOR",
+    "from_column": "HONOR_PID_ID",
+    "to_table": "HQ_CODE_HONOR",
+    "to_column": "ID",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_HONOR",
+    "from_column": "HONOR_ID",
+    "to_table": "HQ_CODE_HONOR",
+    "to_column": "ID",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_HONOR",
+    "from_column": "HONOR_LEVEL_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_RS_HONOR",
+    "from_column": "HJR_NO",
+    "to_table": "HQ_RS_TEA",
+    "to_column": "TEA_NO",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_CODE_MAJOR",
+    "from_column": "DEPT_ID",
+    "to_table": "HQ_CODE_DEPT",
+    "to_column": "ID",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_CODE_MAJOR",
+    "from_column": "ZDZY_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_CODE_MAJOR",
+    "from_column": "TSZY_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_CODE_MAJOR",
+    "from_column": "FZR_NO",
+    "to_table": "hq_rs_tea",
+    "to_column": "TEA_NO",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_CODE_MAJOR",
+    "from_column": "ZYFL_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_CODE_MAJOR_XN",
+    "from_column": "DEPT_ID",
+    "to_table": "HQ_CODE_DEPT",
+    "to_column": "ID",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_CODE_MAJOR_XN",
+    "from_column": "ZDZY_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_CODE_MAJOR_XN",
+    "from_column": "TSZY_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_CODE_MAJOR_XN",
+    "from_column": "FZR_NO",
+    "to_table": "hq_rs_tea",
+    "to_column": "TEA_NO",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_CODE_MAJOR_XN",
+    "from_column": "ZYFL_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_CODE_MAJOR_YEAR",
+    "from_column": "DEPT_ID",
+    "to_table": "HQ_CODE_DEPT",
+    "to_column": "ID",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_CODE_MAJOR_YEAR",
+    "from_column": "ZDZY_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_CODE_MAJOR_YEAR",
+    "from_column": "TSZY_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_CODE_MAJOR_YEAR",
+    "from_column": "FZR_NO",
+    "to_table": "hq_rs_tea",
+    "to_column": "TEA_NO",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_CODE_MAJOR_YEAR",
+    "from_column": "ZYFL_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_CODE_MAJOR_DTR",
+    "from_column": "CODE_",
+    "to_table": "HQ_CODE_MAJOR",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_CODE_MAJOR_DTR",
+    "from_column": "TEA_NO",
+    "to_table": "HQ_RS_TEA",
+    "to_column": "TEA_NO",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_CODE_MAJOR_MAPPER",
+    "from_column": "MAJOR_CODE",
+    "to_table": "HQ_CODE_MAJOR",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_CODE_MAJOR_MAPPER",
+    "from_column": "GB_MAJOR_CODE",
+    "to_table": "HQ_GB_MAJOR_CATALOGUE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_CODE_MAJOR_MAPPER",
+    "from_column": "GB_MAJOR_FX_CODE",
+    "to_table": "HQ_CODE_MAJOR",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_GB_MAJOR_CATALOGUE",
+    "from_column": "PYCC_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_OUT_MAJOR_RECORDS",
+    "from_column": "SCHOOL_CODE",
+    "to_table": "HQ_JC_XX",
+    "to_column": "DM",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_OUT_MAJOR_RECORDS",
+    "from_column": "MAJOR_CODE",
+    "to_table": "HQ_GB_MAJOR_CATALOGUE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_JX_MAJOR_COURSE",
+    "from_column": "ZDKC_GRADE_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_JX_MAJOR_COURSE",
+    "from_column": "JPKC_GRADE_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_JX_MAJOR_COURSE",
+    "from_column": "COURSE_TYPE_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_JX_MAJOR_COURSE",
+    "from_column": "COURSE_ATTR_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_JX_MAJOR_COURSE",
+    "from_column": "COURSE_NATURE_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_JX_MAJOR_COURSE",
+    "from_column": "FZR_NO",
+    "to_table": "HQ_RS_TEA",
+    "to_column": "TEA_NO",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_JX_MAJOR_COURSE",
+    "from_column": "DEPT_ID",
+    "to_table": "HQ_CODE_DEPT",
+    "to_column": "ID",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_JX_MAJOR_COURSE",
+    "from_column": "MAJOR_CODE",
+    "to_table": "HQ_CODE_MAJOR",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_CODE_MAJOR_GROUP",
+    "from_column": "FZR_NO",
+    "to_table": "HQ_RS_TEA",
+    "to_column": "TEA_NO",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_CODE_MAJOR_GROUP_MAPPER",
+    "from_column": "MAJOR_GROUP_ID",
+    "to_table": "HQ_CODE_MAJOR_GROUP",
+    "to_column": "ID",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_CODE_MAJOR_GROUP_MAPPER",
+    "from_column": "MAJOR_CODE",
+    "to_table": "HQ_CODE_MAJOR",
+    "to_column": "ID",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_CODE_COURSE",
+    "from_column": "ZDKC_GRADE_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_CODE_COURSE",
+    "from_column": "JPKC_GRADE_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_CODE_COURSE",
+    "from_column": "COURSE_TYPE_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_CODE_COURSE",
+    "from_column": "COURSE_ATTR_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_CODE_COURSE",
+    "from_column": "COURSE_NATURE_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_CODE_COURSE",
+    "from_column": "FZR_NO",
+    "to_table": "HQ_RS_TEA",
+    "to_column": "TEA_NO",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_CODE_COURSE",
+    "from_column": "DEPT_ID",
+    "to_table": "HQ_CODE_DEPT",
+    "to_column": "ID",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_JX_TEACHCLASS",
+    "from_column": "COURSE_CODE",
+    "to_table": "HQ_CODE_COURSE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_JX_TEACHCLASS_STU",
+    "from_column": "COURSE_CODE",
+    "to_table": "HQ_CODE_COURSE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_JX_TEACHCLASS_STU",
+    "from_column": "TEACHCLASS_ID",
+    "to_table": "HQ_JX_TEACHCLASS",
+    "to_column": "ID",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_JX_TEACHCLASS_STU",
+    "from_column": "STU_NO",
+    "to_table": "HQ_XS_STU",
+    "to_column": "STU_NO",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_JX_TEACHCLASS_TEA",
+    "from_column": "COURSE_CODE",
+    "to_table": "HQ_CODE_COURSE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_JX_TEACHCLASS_TEA",
+    "from_column": "TEACHCLASS_ID",
+    "to_table": "HQ_JX_TEACHCLASS",
+    "to_column": "ID",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_JX_TEACHCLASS_TEA",
+    "from_column": "TEA_NO",
+    "to_table": "HQ_RS_TEA",
+    "to_column": "TEA_NO",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_JX_KCB",
+    "from_column": "COURSE_CODE",
+    "to_table": "HQ_CODE_COURSE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_JX_KCB",
+    "from_column": "TEACHCLASS_ID",
+    "to_table": "HQ_JX_TEACHCLASS",
+    "to_column": "ID",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_JX_KCB",
+    "from_column": "DEPT_ID",
+    "to_table": "HQ_CODE_DEPT",
+    "to_column": "ID",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_JX_KCB",
+    "from_column": "LECTURE_TYPE_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_JX_KCB",
+    "from_column": "CLASSROOM_ID",
+    "to_table": "HQ_JC_JS_ZZJG",
+    "to_column": "ID",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_JX_KCB",
+    "from_column": "COURSE_TYPE_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_JX_KCB",
+    "from_column": "COURSE_ATTR_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_JX_KCB",
+    "from_column": "COURSE_NATURE_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_JX_KCB_TEA",
+    "from_column": "KCB_ID",
+    "to_table": "HQ_JX_KCB",
+    "to_column": "ID",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_JX_KCB_TEA",
+    "from_column": "TEA_NO",
+    "to_table": "HQ_RS_TEA",
+    "to_column": "TEA_NO",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_JX_KCB_PERIOD",
+    "from_column": "COURSE_CODE",
+    "to_table": "HQ_CODE_COURSE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_JX_KCB_PERIOD",
+    "from_column": "TEACHCLASS_ID",
+    "to_table": "HQ_JX_TEACHCLASS",
+    "to_column": "ID",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_JX_KCB_PERIOD",
+    "from_column": "DEPT_ID",
+    "to_table": "HQ_CODE_DEPT",
+    "to_column": "ID",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_JX_KCB_PERIOD",
+    "from_column": "LECTURE_TYPE_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_JX_KCB_PERIOD",
+    "from_column": "CLASSROOM_ID",
+    "to_table": "HQ_JC_JS_ZZJG",
+    "to_column": "ID",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_JX_KCB_PERIOD",
+    "from_column": "COURSE_TYPE_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_JX_KCB_PERIOD",
+    "from_column": "COURSE_ATTR_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_JX_KCB_PERIOD",
+    "from_column": "COURSE_NATURE_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_JX_KCB_PERIOD_TEA",
+    "from_column": "KCB_PERIOD_ID",
+    "to_table": "HQ_JX_KCB_PERIOD",
+    "to_column": "ID",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_JX_KCB_PERIOD_TEA",
+    "from_column": "TEA_NO",
+    "to_table": "HQ_RS_TEA",
+    "to_column": "TEA_NO",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_JX_TEACHCLASS_MAJOR",
+    "from_column": "TEACHCLASS_ID",
+    "to_table": "HQ_JX_TEACHCLASS",
+    "to_column": "ID",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_JX_TEACHCLASS_MAJOR",
+    "from_column": "MAJOR_CODE",
+    "to_table": "HQ_CODE_MAJOR",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_JX_TEACHCLASS_XZB",
+    "from_column": "TEACHCLASS_ID",
+    "to_table": "HQ_JX_TEACHCLASS",
+    "to_column": "ID",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_JX_TEACHCLASS_XZB",
+    "from_column": "CLASS_ID",
+    "to_table": "HQ_CODE_CLASSES",
+    "to_column": "ID",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_XS_STU",
+    "from_column": "DEPT_ID",
+    "to_table": "HQ_CODE_dept",
+    "to_column": "ID",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_XS_STU",
+    "from_column": "MAJOR_CODE",
+    "to_table": "HQ_CODE_MAJOR",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_XS_STU",
+    "from_column": "CLASS_ID",
+    "to_table": "HQ_CODE_classes",
+    "to_column": "ID",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_XS_STU",
+    "from_column": "SEX_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_XS_STU",
+    "from_column": "NATION_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_XS_STU",
+    "from_column": "POLITICS_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_XS_STU",
+    "from_column": "ANMELDEN_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_XS_STU",
+    "from_column": "PYCC_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_XS_STU",
+    "from_column": "RECRUIT_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_XS_STU",
+    "from_column": "STU_FROM_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_XS_STU",
+    "from_column": "STU_STATE_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_XS_STU",
+    "from_column": "STU_ROLL_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_XS_STU",
+    "from_column": "STU_ORIGIN_ID",
+    "to_table": "HQ_CODE_XZQH",
+    "to_column": "ID",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_XS_STU",
+    "from_column": "GATQ_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_XS_STU",
+    "from_column": "STU_SOURCE_LB_ID",
+    "to_table": "HQ_CODE_STU_SOURCE_LB",
+    "to_column": "ID",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_XS_STU",
+    "from_column": "STU_LB_ID",
+    "to_table": "HQ_CODE_STU_LB",
+    "to_column": "ID",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_XS_STU",
+    "from_column": "ENROLL_LB_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_XS_STU",
+    "from_column": "TRAIN_WAY_ID",
+    "to_table": "HQ_CODE_TRAIN_WAY",
+    "to_column": "ID",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_XS_STU",
+    "from_column": "NOW_PYCC_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_XS_STU",
+    "from_column": "STU_SOURCE_ID",
+    "to_table": "HQ_CODE_STU_SOURCE",
+    "to_column": "ID",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_XS_STU",
+    "from_column": "LIVE_ORIGIN_ID",
+    "to_table": "HQ_CODE_XZQH",
+    "to_column": "ID",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_XS_STU",
+    "from_column": "COUNTRY_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_XS_STU",
+    "from_column": "BLOOD_TYPE_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_XS_STU_YEAR",
+    "from_column": "DEPT_ID",
+    "to_table": "HQ_CODE_dept",
+    "to_column": "ID",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_XS_STU_YEAR",
+    "from_column": "MAJOR_CODE",
+    "to_table": "HQ_CODE_MAJOR",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_XS_STU_YEAR",
+    "from_column": "CLASS_ID",
+    "to_table": "HQ_CODE_classes",
+    "to_column": "ID",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_XS_STU_YEAR",
+    "from_column": "SEX_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_XS_STU_YEAR",
+    "from_column": "NATION_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_XS_STU_YEAR",
+    "from_column": "POLITICS_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_XS_STU_YEAR",
+    "from_column": "ANMELDEN_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_XS_STU_YEAR",
+    "from_column": "PYCC_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_XS_STU_YEAR",
+    "from_column": "RECRUIT_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_XS_STU_YEAR",
+    "from_column": "STU_FROM_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_XS_STU_YEAR",
+    "from_column": "STU_STATE_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_XS_STU_YEAR",
+    "from_column": "STU_ROLL_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_XS_STU_YEAR",
+    "from_column": "STU_ORIGIN_ID",
+    "to_table": "HQ_CODE_xzqh",
+    "to_column": "ID",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_XS_STU_YEAR",
+    "from_column": "GATQ_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_XS_STU_YEAR",
+    "from_column": "STU_SOURCE_LB_ID",
+    "to_table": "hq_code_STU_SOURCE_LB",
+    "to_column": "ID",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_XS_STU_YEAR",
+    "from_column": "ENROLL_LB_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_XS_STU_YEAR",
+    "from_column": "TRAIN_WAY_ID",
+    "to_table": "hq_code_TRAIN_WAY",
+    "to_column": "ID",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_XS_STU_YEAR",
+    "from_column": "NOW_PYCC_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_XS_STU_YEAR",
+    "from_column": "STU_LB_ID",
+    "to_table": "hq_code_stu_lb",
+    "to_column": "ID",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_XS_STU_YEAR",
+    "from_column": "STU_SOURCE_ID",
+    "to_table": "hq_code_STU_SOURCE",
+    "to_column": "ID",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_XS_STU_YEAR",
+    "from_column": "LIVE_ORIGIN_ID",
+    "to_table": "HQ_CODE_xzqh",
+    "to_column": "ID",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_XS_STU_YEAR",
+    "from_column": "COUNTRY_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_XS_STU_YEAR",
+    "from_column": "BLOOD_TYPE_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_XS_STU_XQ",
+    "from_column": "DEPT_ID",
+    "to_table": "HQ_CODE_dept",
+    "to_column": "ID",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_XS_STU_XQ",
+    "from_column": "MAJOR_CODE",
+    "to_table": "HQ_CODE_MAJOR",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_XS_STU_XQ",
+    "from_column": "CLASS_ID",
+    "to_table": "HQ_CODE_classes",
+    "to_column": "ID",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_XS_STU_XQ",
+    "from_column": "SEX_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_XS_STU_XQ",
+    "from_column": "NATION_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_XS_STU_XQ",
+    "from_column": "POLITICS_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_XS_STU_XQ",
+    "from_column": "ANMELDEN_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_XS_STU_XQ",
+    "from_column": "PYCC_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_XS_STU_XQ",
+    "from_column": "RECRUIT_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_XS_STU_XQ",
+    "from_column": "STU_FROM_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_XS_STU_XQ",
+    "from_column": "STU_STATE_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_XS_STU_XQ",
+    "from_column": "STU_ROLL_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_XS_STU_XQ",
+    "from_column": "STU_ORIGIN_ID",
+    "to_table": "HQ_CODE_xzqh",
+    "to_column": "ID",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_XS_STU_XQ",
+    "from_column": "GATQ_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_XS_STU_XQ",
+    "from_column": "STU_SOURCE_LB_ID",
+    "to_table": "hq_code_STU_SOURCE_LB",
+    "to_column": "ID",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_XS_STU_XQ",
+    "from_column": "STU_LB_ID",
+    "to_table": "hq_code_stu_lb",
+    "to_column": "ID",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_XS_STU_XQ",
+    "from_column": "ENROLL_LB_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_XS_STU_XQ",
+    "from_column": "TRAIN_WAY_ID",
+    "to_table": "hq_code_TRAIN_WAY",
+    "to_column": "ID",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_XS_STU_XQ",
+    "from_column": "NOW_PYCC_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_XS_STU_XQ",
+    "from_column": "STU_SOURCE_ID",
+    "to_table": "hq_code_STU_SOURCE",
+    "to_column": "ID",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_XS_STU_XQ",
+    "from_column": "LIVE_ORIGIN_ID",
+    "to_table": "HQ_CODE_xzqh",
+    "to_column": "ID",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_XS_STU_XQ",
+    "from_column": "COUNTRY_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_XS_STU_XQ",
+    "from_column": "BLOOD_TYPE_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_XS_PHOTO",
+    "from_column": "STU_NO",
+    "to_table": "HQ_XS_STU",
+    "to_column": "STU_NO",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_XS_CHANGE",
+    "from_column": "STU_NO",
+    "to_table": "hq_xs_stu",
+    "to_column": "STU_NO",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_XS_CHANGE",
+    "from_column": "STU_CHANGE_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_XS_CHANGE",
+    "from_column": "CHANGE_REASON_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_XS_CHANGE",
+    "from_column": "OLD_DEPT_ID",
+    "to_table": "HQ_CODE_dept",
+    "to_column": "ID",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_XS_CHANGE",
+    "from_column": "OLD_MAJOR_CODE",
+    "to_table": "HQ_CODE_MAJOR",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_XS_CHANGE",
+    "from_column": "OLD_CLASS_ID",
+    "to_table": "HQ_CODE_classes",
+    "to_column": "ID",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_XS_CHANGE",
+    "from_column": "NOW_DEPT_ID",
+    "to_table": "HQ_CODE_dept",
+    "to_column": "ID",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_XS_CHANGE",
+    "from_column": "NOW_MAJOR_CODE",
+    "to_table": "HQ_CODE_MAJOR",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_XS_CHANGE",
+    "from_column": "NOW_CLASS_ID",
+    "to_table": "HQ_CODE_classes",
+    "to_column": "ID",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_XS_CHANGE",
+    "from_column": "OLD_STU_ROLL_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_XS_CHANGE",
+    "from_column": "OLD_STU_STATE_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_XS_CHANGE",
+    "from_column": "NOW_STU_ROLL_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_XS_CHANGE",
+    "from_column": "NOW_STU_STATE_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_JX_PJ_PJ",
+    "from_column": "OBJECT_TYPE_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_JX_PJ_PJ",
+    "from_column": "ASSESS_TYPE_CODE",
+    "to_table": "HQ_CODE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_JX_PJ_PJ",
+    "from_column": "TEA_NO",
+    "to_table": "HQ_RS_TEA",
+    "to_column": "TEA_NO",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_JX_PJ_PJ",
+    "from_column": "COURSE_CODE",
+    "to_table": "HQ_CODE_COURSE",
+    "to_column": "CODE_",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_JX_PJ_PJ",
+    "from_column": "TEACHCLASS_ID",
+    "to_table": "HQ_JX_TEACHCLASS",
+    "to_column": "ID",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_JX_PJ_XSPJ",
+    "from_column": "RESULT_ID",
+    "to_table": "HQ_JX_PJ_PJ",
+    "to_column": "ID",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_JX_PJ_XSPJ",
+    "from_column": "ASSESS_PERSON_ID",
+    "to_table": "hq_xs_stu",
+    "to_column": "ID",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_JX_PJ_JSPJ",
+    "from_column": "RESULT_ID",
+    "to_table": "HQ_JX_PJ_PJ",
+    "to_column": "ID",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_JX_PJ_JSPJ",
+    "from_column": "ASSESS_PERSON_ID",
+    "to_table": "HQ_RS_TEA",
+    "to_column": "ID",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_XS_STU_ZHCP_ZHCJ",
+    "from_column": "STU_NO",
+    "to_table": "hq_xs_stu",
+    "to_column": "STU_NO",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_XS_STU_ZHCP_CPCJ",
+    "from_column": "STU_NO",
+    "to_table": "hq_xs_stu",
+    "to_column": "STU_NO",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_XS_STU_ZHCP_CPCJ",
+    "from_column": "CPLX_ID",
+    "to_table": "HQ_XS_STU_ZHCP_CPLX",
+    "to_column": "ID",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_XS_STU_ZHCP_JJFSJ",
+    "from_column": "STU_NO",
+    "to_table": "hq_xs_stu",
+    "to_column": "STU_NO",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_XS_STU_ZHCP_JJFSJ",
+    "from_column": "JJFGZ_ID",
+    "to_table": "HQ_XS_STU_ZHCP_JJFGZ",
+    "to_column": "ID",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_XS_STU_ZHCP_JJFGZ",
+    "from_column": "CPLX_ID",
+    "to_table": "HQ_XS_STU_ZHCP_CPLX",
+    "to_column": "ID",
+    "relation": "foreign_key"
+  },
+  {
+    "from_table": "HQ_XS_STU_ZHCP_JJFGZ",
+    "from_column": "DEPT_ID",
+    "to_table": "HQ_CODE_dept",
+    "to_column": "ID",
+    "relation": "foreign_key"
+  }
+]

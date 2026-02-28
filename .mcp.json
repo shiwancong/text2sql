@@ -1,0 +1,30 @@
+{
+  "mcpServers": {
+    "oracle": {
+      "command": "java",
+      "args": [
+        "-jar",
+        "E:\\Work\\agent-work\\text-to-sql\\oracle-mcp-server-1.0.0.jar"
+      ],
+      "env": {
+        "ORACLE_URL": "jdbc:oracle:thin:@192.168.1.179:1521:devdb",
+        "ORACLE_USERNAME": "data_hq_zb",
+        "ORACLE_PASSWORD": "data_hq_zb",
+        "ORACLE_POOL_MIN_SIZE": "2",
+        "ORACLE_POOL_MAX_SIZE": "10",
+        "ORACLE_POOL_QUERY_TIMEOUT_SECONDS": "30"
+      }
+    },
+    "ragflow": {
+      "command": "python",
+      "args": [
+        "E:\\Work\\agent-work\\text-to-sql\\ragflow-mcp-server\\local_rag.py"
+      ],
+      "env": {
+        "RAGFLOW_URL": "http://localhost:9380",
+        "RAGFLOW_API_KEY": "${RAGFLOW_API_KEY}",
+        "RAG_KNOWLEDGE_DIR": "E:\\Work\\agent-work\\text-to-sql\\ragflow\\knowledge"
+      }
+    }
+  }
+}

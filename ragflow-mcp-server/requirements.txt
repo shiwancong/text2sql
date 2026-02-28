@@ -1,0 +1,23 @@
+# RAGFlow MCP Server Requirements
+
+# MCP SDK
+mcp>=1.0.0
+
+# HTTP requests (for RAGFlow API mode)
+requests>=2.31.0
+
+# YAML support (optional, for config.yaml)
+pyyaml>=6.0
+
+# Pydantic for data validation
+pydantic>=2.0.0
+
+# Local RAG dependencies (轻量级本地RAG)
+# sentence-transformers - 文本嵌入模型
+sentence-transformers>=2.2.0
+
+# faiss-cpu - 向量检索
+faiss-cpu>=1.7.4
+
+# numpy
+numpy>=1.24.0
