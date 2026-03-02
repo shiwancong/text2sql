@@ -138,6 +138,96 @@ ORDER BY a.sort_field;
 | 一方可能为空 | LEFT JOIN | 保留左表全部记录 |
 | 查询条件可选 | LEFT JOIN | 允许关联字段为空 |
 
+### 按需关联表原则（极重要！）
+
+⚠️ **核心原则**：只关联用户问题明确需要的表，避免关联无用表导致数据重复
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│              数据重复问题的常见原因                           │
+├─────────────────────────────────────────────────────────────┤
+│                                                             │
+│   问题1：关联了课程表，但课程有多名教师导致重复         │
+│   ├─ SELECT ... JOIN HQ_CODE_COURSE ... JOIN HQ_JX_KCB_TEA     │
+│   ├─ 一门课程可能关联多个教师，每个教师产生一条记录    │
+│   └─ 结果：3条记录变成了15条（5个教师×3门课）           │
+│                                                             │
+│   问题2：关联了教室表，但教室可能被多次使用             │
+│   ├─ SELECT ... JOIN HQ_JC_JS_ZZJG ...                     │
+│   ├─ 同一教室在不同时间被不同课程使用，导致重复           │
+│   └─ 结果：实际3条记录，显示20+条（每个时间段一条）       │
+│                                                             │
+│   解决方案：按需关联，只关联用户明确要求的字段           │
+└─────────────────────────────────────────────────────────────┘
+```
+
+**按需关联判断表：**
+
+| 用户问题需求 | 需要关联的表 | 不需要关联的表 | 理由 |
+|-------------|-----------|--------------|------|
+| "教师的排课信息" | HQ_JX_KCB + HQ_JX_KCB_TEA + HQ_RS_TEA | 课程表、教室表 | 用户没要求课程名称和教室 |
+| "上了哪些课程" | HQ_JX_KCB + HQ_CODE_COURSE | 教室表、教师表 | 用户没要求教室和教师 |
+| "在哪些教室上课" | HQ_JX_KCB + HQ_JC_JS_ZZJG | 课程表、教师表 | 用户没要求课程和教师 |
+| "课程在哪个教室" | HQ_JX_KCB + HQ_JC_JS_ZZJG | 教师表 | 用户没要求教师信息 |
+
+**数据重复检查清单：**
+
+```
+生成SQL前问自己：
+├─ 这个表是否是用户问题要求的？
+├─ 关联这个表会产生数据重复吗？
+├─ 用户明确要求显示这个字段吗？
+├─ 这个字段对回答问题有必要吗？
+└─ 能不能通过去掉JOIN来简化查询？
+```
+
+**典型错误示例：**
+
+```sql
+-- ❌ 错误：关联了课程表和教室表，导致82条结果（实际应该3条）
+SELECT
+  k.TEACHCLASS_NAME AS 班级,
+  cr.NAME_ AS 课程,    ← 不需要！
+  r.NAME_ AS 教室,    ← 不需要！
+  t.NAME_ AS 教师
+FROM HQ_JX_KCB k
+JOIN HQ_JX_KCB_TEA kt ON k.ID = kt.KCB_ID
+JOIN HQ_RS_TEA t ON kt.TEA_NO = t.TEA_NO
+JOIN HQ_CODE_COURSE cr ON k.COURSE_CODE = cr.CODE_  ← 导致重复！
+LEFT JOIN HQ_JC_JS_ZZJG r ON k.CLASSROOM_ID = r.ID  ← 导致重复！
+WHERE ...
+
+-- ✅ 正确：只关联必要的表，结果3条
+SELECT
+  k.TEACHCLASS_NAME AS 班级,
+  k.COURSE_CODE AS 课程代码,
+  k.PERIOD AS 节次,
+  k.DAY_OF_WEEK AS 星期,
+  t.NAME_ AS 教师
+FROM HQ_JX_KCB k
+JOIN HQ_JX_KCB_TEA kt ON k.ID = kt.KCB_ID
+JOIN HQ_RS_TEA t ON kt.TEA_NO = t.TEA_NO
+WHERE t.NAME_ = '战会玲'
+  AND k.SCHOOL_YEAR = '2020-2021'
+  AND k.TERM_CODE = '01'
+```
+
+**关联表的优先级：**
+
+```
+优先级1（必需）：
+├─ 主表（如HQ_JX_KCB课表）
+└─ 直接关联的表（如HQ_JX_KCB_TEA授课教师表）
+
+优先级2（按需）：
+├─ 如果用户要求"课程名称" → 关联HQ_CODE_COURSE
+├─ 如果用户要求"教室" → 关联HQ_JC_JS_ZZJG
+└─ 如果用户要求"教师信息" → 关联HQ_RS_TEA
+
+优先级3（避免）：
+└─ 如果用户没明确要求 → 不关联，直接显示代码字段
+```
+
 ### RAG 检索策略
 
 当用户提出涉及多个实体的问题时：
@@ -211,6 +301,123 @@ AND d.ISTRUE = 1
 - 部门查询：`WHERE d.ISTRUE = 1`
 - 教师查询：`WHERE t.ISTRUE = 1`（如果表有此字段）
 - 专业查询：`WHERE m.ISTRUE = 1`
+
+### IS_NORMAL 在职状态检查（必须）
+
+⚠️ **极重要**：多表联查教师/教职工时，必须检查 IS_NORMAL 字段
+
+```
+❌ 错误：没有检查IS_NORMAL
+SELECT t.NAME_ AS 教师姓名, d.NAME_ AS 部门名称
+FROM HQ_RS_TEA t
+JOIN HQ_CODE_DEPT d ON t.DEPT_ID = d.ID
+WHERE d.NAME_ LIKE '%护理%'
+
+✅ 正确：添加IS_NORMAL条件
+SELECT t.NAME_ AS 教师姓名, d.NAME_ AS 部门名称
+FROM HQ_RS_TEA t
+JOIN HQ_CODE_DEPT d ON t.DEPT_ID = d.ID
+WHERE d.NAME_ LIKE '%护理%'
+  AND t.IS_NORMAL = 1  -- 只查询在职教师
+  AND d.ISTRUE = 1     -- 只查询有效部门
+```
+
+### 班级表关联字段判断（重要）
+
+⚠️ **重要**：班级表 HQ_CODE_CLASSES 有 ID 和 NO_ 两个字段
+
+```
+场景1：学生表关联班级（使用 NO_）
+JOIN HQ_CODE_CLASSES c ON s.CLASS_ID = c.NO_
+
+场景2：教学班行政班关联（需确认）
+-- 先使用 describe_table HQ_JX_TEACHCLASS_XZB 确认
+-- 如果 CLASS_ID 存储的是班级编码，使用 NO_
+-- 如果 CLASS_ID 存储的是班级内部ID，使用 ID
+
+判断原则：
+- CLASS_ID 通常存储班级编码，关联 c.NO_
+- 使用 describe_table 确认字段类型和注释
+- 当不确定时，可以尝试两种关联方式
+```
+
+### 表名选择准确性
+
+⚠️ **极重要**：根据查询对象选择正确的表
+
+| 查询对象 | 正确表名 | 错误表名 |
+|---------|---------|---------|
+| 荣誉成果 | HQ_RS_HONOR_RES | HQ_RS_TEACH_RES ❌ |
+| 教学成果奖 | HQ_RS_TEACH_RES | HQ_RS_HONOR_RES ❌ |
+| 学生信息 | HQ_XS_STU | HQ_RS_TEA ❌ |
+| 教师信息 | HQ_RS_TEA | HQ_XS_STU ❌ |
+
+```
+❌ 错误：查询学生用了教师表
+问题："闫亚君"的信息
+SELECT * FROM HQ_RS_TEA WHERE NAME_ = '闫亚君'  -- 闫亚君是学生
+
+✅ 正确：使用学生表
+SELECT * FROM HQ_XS_STU WHERE NAME_ = '闫亚君'  -- 闫亚君是学生
+```
+
+## 班级类型区分规则（极重要！）
+
+⚠️ **核心概念**：教学班 ≠ 行政班，查询排课时必须区分！
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│              多表关联时的班级类型选择                        │
+├─────────────────────────────────────────────────────────────┤
+│                                                             │
+│   场景A：查询排课/课表/上课信息                             │
+│   ├── 班级类型：教学班                                      │
+│   ├── 使用字段：HQ_JX_KCB.TEACHCLASS_NAME                  │
+│   ├── 关联表：不需要关联 HQ_CODE_CLASSES                   │
+│   └── 示例："某教室某日的上课班级"                         │
+│                                                             │
+│   场景B：查询班级学生信息/班级属性                          │
+│   ├── 班级类型：行政班                                      │
+│   ├── 使用字段：HQ_CODE_CLASSES.NAME_                      │
+│   ├── 关联表：需要关联学生表                                │
+│   └── 示例："某班有多少学生"                               │
+│                                                             │
+│   关键判断：用户问题中的"班级"指什么？                       │
+│   ├── "上课班级"、"教的班"、"排课" → 教学班                │
+│   └── "班级学生"、"班级人数" → 行政班                      │
+└─────────────────────────────────────────────────────────────┘
+```
+
+**班级关联决策表：**
+
+| 查询场景 | 班级类型 | 使用字段 | 是否关联CODE_CLASSES |
+|---------|---------|---------|---------------------|
+| 教室的课、某日的课 | 教学班 | `k.TEACHCLASS_NAME` | ❌ 不关联 |
+| 教师教的班 | 教学班 | `k.TEACHCLASS_NAME` | ❌ 不关联 |
+| 某班上了什么课 | 教学班 | `k.TEACHCLASS_NAME` | ❌ 不关联 |
+| 某班有多少学生 | 行政班 | `c.NAME_` | ✅ 需要关联 |
+| 某班属于哪个专业 | 行政班 | `c.NAME_` | ✅ 需要关联 |
+
+**错误模式警示：**
+
+```
+❌ 危险模式：查询排课时关联了行政班表
+FROM HQ_JX_KCB k
+JOIN HQ_JX_TEACHCLASS_XZB tx ON k.TEACHCLASS_ID = tx.TEACHCLASS_ID
+JOIN HQ_CODE_CLASSES c ON tx.CLASS_ID = c.NO_  ← 可能导致数据爆炸
+
+问题：
+- 如果1个教学班对应10个行政班
+- 1条课表记录会变成10条结果
+- 用户期望2条，实际返回20条
+
+✅ 安全模式：直接使用课表中的教学班字段
+FROM HQ_JX_KCB k
+...直接使用 k.TEACHCLASS_NAME
+不关联 HQ_CODE_CLASSES
+```
+
+---
 
 ## 实际表名关联关系
 

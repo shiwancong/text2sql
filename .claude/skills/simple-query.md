@@ -149,7 +149,48 @@ SELECT field1, field2, ...
 FROM table_name
 WHERE condition
 ORDER BY field
-FETCH FIRST n ROWS ONLY;
+-- ⚠️ 该Oracle版本不支持 FETCH FIRST，必须使用 ROWNUM
+-- 错误：FETCH FIRST n ROWS ONLY
+-- 正确：使用子查询包装或直接用 ROWNUM
+```
+
+### Oracle 分页语法（极重要）
+
+⚠️ **该Oracle版本不支持 FETCH FIRST 语法，必须使用 ROWNUM**
+
+```sql
+-- ❌ 错误写法（不支持）
+SELECT * FROM table_name FETCH FIRST 5 ROWS ONLY;
+SELECT * FROM table_name FETCH FIRST 1 ROW ONLY;
+
+-- ✅ 正确写法1：直接使用 ROWNUM
+SELECT * FROM table_name WHERE ROWNUM <= 5;
+SELECT * FROM table_name WHERE ROWNUM = 1;
+
+-- ✅ 正确写法2：需要排序时使用子查询
+SELECT * FROM (
+    SELECT * FROM table_name ORDER BY field_name
+) WHERE ROWNUM <= 5;
+
+-- ✅ 正确写法3：Top N 查询
+SELECT * FROM (
+    SELECT ..., ROWNUM AS rn FROM table_name WHERE ...
+) WHERE rn <= 10;
+```
+
+### COUNT 语法（极重要）
+
+⚠️ **必须使用 COUNT(*)，不能使用 COUNT()**
+
+```sql
+-- ❌ 错误写法
+COUNT()  -- 空括号是错误的
+COUNT    -- 没有括号是错误的
+
+-- ✅ 正确写法
+COUNT(*)           -- 统计所有行
+COUNT(字段名)      -- 统计非空值
+COUNT(DISTINCT 字段名)  -- 统计去重后的行数
 ```
 
 ### 注意事项
@@ -160,8 +201,9 @@ FETCH FIRST n ROWS ONLY;
 - 优先使用有注释的字段，用户友好性更好
 - 添加适当的 WHERE 条件避免返回过多数据
 - 如果用户没有指定排序，按主键或默认字段排序
-- Oracle 使用 `FETCH FIRST n ROWS ONLY` 而不是 `LIMIT`
-- 对于单条记录查询，使用 `ROWNUM = 1` 或 `FETCH FIRST 1 ROW ONLY`
+- **禁止使用 FETCH FIRST**：使用 ROWNUM 代替
+- **COUNT 必须使用 COUNT(*)**：不能使用空括号
+- 对于单条记录查询，使用 `ROWNUM = 1`
 
 ### WHERE 条件生成规则
 
@@ -256,6 +298,52 @@ AND NOT EXISTS (
 - 教研室查询：`WHERE j.ISTRUE = 1`
 - 部门查询：`WHERE d.ISTRUE = 1`
 - 班级查询：`WHERE cl.ISTRUE = 1`
+
+### IS_NORMAL 在职状态检查（必须）
+
+⚠️ **极重要**：查询教师/教职工时，必须检查 IS_NORMAL 字段确保查询在职人员
+
+```
+❌ 错误：没有检查IS_NORMAL（可能包含离职教师）
+SELECT COUNT(*) FROM HQ_RS_TEA WHERE NATION_CODE != '01'
+
+✅ 正确：添加IS_NORMAL条件（只统计在职教师）
+SELECT COUNT(*) FROM HQ_RS_TEA
+WHERE IS_NORMAL = 1 AND NATION_CODE != '01'
+
+✅ 正确：查询少数民族教职工比例
+SELECT
+    COUNT(CASE WHEN t.NATION_CODE != '01' THEN 1 END) AS 少数民族人数,
+    COUNT(*) AS 总人数,
+    ROUND(COUNT(CASE WHEN t.NATION_CODE != '01' THEN 1 END) * 100.0 / COUNT(*), 2) AS 少数民族比例
+FROM HQ_RS_TEA t
+WHERE t.IS_NORMAL = 1  -- 只统计在职教师
+```
+
+**IS_NORMAL = 1 的常见场景**：
+- 教职工统计：`WHERE IS_NORMAL = 1`
+- 教师比例计算：`WHERE IS_NORMAL = 1`
+- 各类教师统计：先过滤 `IS_NORMAL = 1` 再聚合
+
+### 表名选择准确性
+
+⚠️ **极重要**：根据查询对象选择正确的表
+
+| 查询对象 | 正确表名 | 错误表名 |
+|---------|---------|---------|
+| 荣誉成果 | HQ_RS_HONOR_RES | HQ_RS_TEACH_RES ❌ |
+| 教学成果奖 | HQ_RS_TEACH_RES | HQ_RS_HONOR_RES ❌ |
+| 学生信息 | HQ_XS_STU | HQ_RS_TEA ❌ |
+| 教师信息 | HQ_RS_TEA | HQ_XS_STU ❌ |
+
+```
+❌ 错误：查询荣誉成果用错表
+问题："护理学院2022年获取过哪些荣誉成果"
+SELECT * FROM HQ_RS_TEACH_RES WHERE ...  -- 这是教学成果表
+
+✅ 正确：使用荣誉成果表
+SELECT * FROM HQ_RS_HONOR_RES WHERE ...  -- 这是荣誉成果表
+```
 
 ### RAG 检索策略
 

@@ -252,6 +252,62 @@ AND NOT EXISTS (
 - 学生统计：`WHERE s.STU_STATE_CODE = '01'`（在校学生）
 - 教师统计：`WHERE t.ZW_NAME IS NOT NULL`（有职称）
 
+### 代码字段关联（禁止硬编码CASE WHEN）
+
+⚠️ **极重要**：聚合查询中显示代码对应的名称时，必须关联代码表，禁止使用硬编码的CASE WHEN
+
+```
+❌ 错误：使用硬编码的CASE WHEN（民族分布统计）
+SELECT
+  s.NATION_CODE,
+  CASE s.NATION_CODE
+    WHEN '01' THEN '汉族'
+    WHEN '03' THEN '回族'
+    WHEN '05' THEN '苗族'
+    ELSE s.NATION_CODE
+  END AS 民族,
+  COUNT(*) AS 人数
+FROM HQ_XS_STU s
+GROUP BY s.NATION_CODE
+问题：硬编码了民族映射，新增民族需要修改SQL
+
+✅ 正确：关联HQ_CODE表获取民族名称
+SELECT
+  s.NATION_CODE AS 民族代码,
+  c.NAME_ AS 民族,
+  COUNT(*) AS 人数
+FROM HQ_XS_STU s
+JOIN HQ_CODE c ON c.CODE_ = s.NATION_CODE
+WHERE c.CODE_TYPE = 'NATION'  -- 根据实际表结构调整
+GROUP BY s.NATION_CODE, c.NAME_
+ORDER BY COUNT(*) DESC
+优势：自动从代码表获取最新数据
+```
+
+**常见聚合查询中的代码关联：**
+
+| 聚合场景 | 代码字段 | 关联方式 |
+|---------|---------|---------|
+| 各民族学生分布 | NATION_CODE | `JOIN HQ_CODE c ON c.CODE_ = s.NATION_CODE WHERE c.CODE_TYPE = 'NATION'` |
+| 各性别学生分布 | SEX_CODE | `JOIN HQ_CODE c ON c.CODE_ = s.SEX_CODE WHERE c.CODE_TYPE = 'SEX'` |
+| 各学籍状态分布 | STU_STATE_CODE | `JOIN HQ_CODE c ON c.CODE_ = s.STU_STATE_CODE WHERE c.CODE_TYPE = 'STU_STATE'` |
+| 各培养层次分布 | PYCC_CODE | `JOIN HQ_CODE c ON c.CODE_ = s.PYCC_CODE WHERE c.CODE_TYPE = 'PYCC'` |
+
+**聚合查询 + 代码关联模板：**
+
+```sql
+SELECT
+  c.NAME_ AS 分类名称,
+  COUNT(*) AS 数量,
+  ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER(), 2) AS 比例
+FROM 数据表 main_table
+JOIN HQ_CODE c ON c.CODE_ = main_table.XXX_CODE
+WHERE c.CODE_TYPE = 'XXX_CODE_TYPE'  -- 根据实际代码类型调整
+  AND main_table.IS_NORMAL = 1       -- 根据业务需求添加
+GROUP BY c.NAME_
+ORDER BY COUNT(*) DESC
+```
+
 ### 多层级聚合
 
 ```sql
@@ -397,9 +453,120 @@ ORDER BY COUNT(s.STU_NO) DESC;
 3. **精度控制**：使用 ROUND() 控制小数位数
 4. **性能优化**：先 WHERE 过滤再 GROUP BY，减少计算量
 5. **Oracle 特性**：
-   - 使用 `FETCH FIRST n ROWS ONLY` 而不是 `LIMIT`
+   - ⚠️ **禁止使用 FETCH FIRST**：使用 `ROWNUM <= n` 或子查询方式
    - 使用 `ROLLUP` 或 `CUBE` 进行多层级聚合
-   - 窗口函数：`RANK()`, `DENSE_RANK()`, `ROW_NUMBER()`
+   - 窗口函数：`RANK()`, `DENSE_RANK()`, `ROW_NUMBER()`, `LAG()`
+
+### COUNT 语法（极重要）
+
+⚠️ **聚合查询中必须使用 COUNT(*)，不能使用 COUNT()**
+
+```sql
+-- ❌ 错误写法
+SELECT COUNT() FROM table_name  -- 空括号是错误的
+
+-- ✅ 正确写法
+SELECT COUNT(*) FROM table_name
+SELECT COUNT(DISTINCT field) FROM table_name
+
+-- ✅ 计算比例时的正确写法
+SELECT
+    COUNT(CASE WHEN condition THEN 1 END) AS match_count,
+    COUNT(*) AS total_count,
+    ROUND(COUNT(CASE WHEN condition THEN 1 END) * 100.0 / COUNT(*), 2) AS percentage
+FROM table_name
+```
+
+### 连续性判断（LAG窗口函数）
+
+⚠️ **极重要**：当题目要求"连续N年/连续N学期"时，必须使用LAG窗口函数判断连续性
+
+**场景1：连续三年获得教学成果奖项的二级学院**
+
+```sql
+-- ❌ 错误：只统计不同年份数量，未判断连续性
+SELECT d.NAME_ AS 学院名称
+FROM HQ_RS_TEACH_RES r
+JOIN HQ_CODE_DEPT d ON r.DEPT_ID = d.ID
+GROUP BY d.NAME_
+HAVING COUNT(DISTINCT SUBSTR(r.DATE_, 1, 4)) >= 3
+
+-- ✅ 正确：使用LAG判断年份连续性
+WITH ranked_data AS (
+  SELECT
+    d.NAME_ AS 学院名称,
+    SUBSTR(r.DATE_, 1, 4) AS 年份,
+    LAG(SUBSTR(r.DATE_, 1, 4), 1) OVER (PARTITION BY d.ID ORDER BY SUBSTR(r.DATE_, 1, 4)) AS 前一年,
+    LAG(SUBSTR(r.DATE_, 1, 4), 2) OVER (PARTITION BY d.ID ORDER BY SUBSTR(r.DATE_, 1, 4)) AS 前两年
+  FROM HQ_RS_TEACH_RES r
+  JOIN HQ_CODE_DEPT d ON r.DEPT_ID = d.ID
+  WHERE d.LEVEL_TYPE = 'YX'  -- 二级学院筛选
+    AND r.DATE_ IS NOT NULL
+)
+SELECT DISTINCT 学院名称
+FROM ranked_data
+WHERE TO_NUMBER(年份) - TO_NUMBER(前一年) = 1
+  AND TO_NUMBER(前一年) - TO_NUMBER(前两年) = 1
+```
+
+**场景2：连续三年各民族学生人数超过100的民族**
+
+```sql
+-- ❌ 错误：只统计各年人数>100，未判断连续性
+SELECT s.NATION_CODE, COUNT(*) AS 学生人数
+FROM HQ_XS_STU_YEAR s
+GROUP BY s.NATION_CODE, s."YEAR_"
+HAVING COUNT(*) > 100
+
+-- ✅ 正确：使用LAG判断连续性
+WITH nation_yearly AS (
+  SELECT
+    s.NATION_CODE AS 民族代码,
+    s."YEAR_" AS 年份,
+    COUNT(*) AS 学生人数,
+    LAG(s."YEAR_", 1) OVER (PARTITION BY s.NATION_CODE ORDER BY s."YEAR_") AS 前一年,
+    LAG(s."YEAR_", 2) OVER (PARTITION BY s.NATION_CODE ORDER BY s."YEAR_") AS 前两年
+  FROM HQ_XS_STU_YEAR s
+  GROUP BY s.NATION_CODE, s."YEAR_"
+  HAVING COUNT(*) > 100
+),
+continuous_nations AS (
+  SELECT 民族代码
+  FROM nation_yearly
+  WHERE TO_NUMBER(年份) - TO_NUMBER(前一年) = 1
+    AND TO_NUMBER(前一年) - TO_NUMBER(前两年) = 1
+)
+SELECT DISTINCT 民族代码
+FROM continuous_nations
+```
+
+**连续性判断的关键点**：
+1. 使用 `LAG(field, n)` 获取前n个时间点的值
+2. 使用 `PARTITION BY` 按分组字段分组
+3. 使用 `ORDER BY` 按时间字段排序
+4. 判断相邻时间点差值 = 1（年份连续）
+5. 对于学期：需要判断学年+学期的组合
+
+### ROWNUM 分页语法
+
+⚠️ **聚合查询禁止使用 FETCH FIRST**
+
+```sql
+-- ❌ 错误：使用 FETCH FIRST（不支持）
+SELECT m.NAME_, COUNT(*)
+FROM HQ_CODE_MAJOR m
+GROUP BY m.NAME_
+ORDER BY COUNT(*) DESC
+FETCH FIRST 5 ROWS ONLY
+
+-- ✅ 正确：使用子查询 + ROWNUM
+SELECT * FROM (
+  SELECT m.NAME_, COUNT(*) AS cnt
+  FROM HQ_CODE_MAJOR m
+  GROUP BY m.NAME_
+  ORDER BY COUNT(*) DESC
+) WHERE ROWNUM <= 5
+```
 
 ## 错误处理
 
