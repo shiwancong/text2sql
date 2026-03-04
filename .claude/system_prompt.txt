@@ -131,6 +131,66 @@
 | "第一学期/上学期" | 学期代码 | `WHERE TERM_CODE = '01'` |
 | "第二学期/下学期" | 学期代码 | `WHERE TERM_CODE = '02'` |
 
+#### 2.1.1 学年格式理解（🔥 极重要！）
+
+⚠️ **核心概念**：数据库中学年格式为"YYYY-YYYY"，不是单独的年份
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                     学年格式说明                             │
+├─────────────────────────────────────────────────────────────┤
+│                                                             │
+│   正确格式：                                                 │
+│   ├── "2023-2024" 表示 2023-2024 学年                       │
+│   ├── "2022-2023" 表示 2022-2023 学年                       │
+│   └── SCHOOL_YEAR 字段存储的就是这种格式                    │
+│                                                             │
+│   用户问题 "2023年开设课程多少门" 的理解：                   │
+│   ├── 错误理解：WHERE SCHOOL_YEAR = '2023' ❌               │
+│   ├── 正确理解：需要查询包含2023自然年的学年                 │
+│   │   └── 2022-2023-02（2023上半年）+ 2023-2024-01（2023下半年）│
+│                                                             │
+│   解决方案：                                                 │
+│   ├── 方式1：通过 HQ_CODE_XNXQ 表匹配自然年范围              │
+│   │   WHERE SCHOOL_YEAR IN (                                 │
+│   │     SELECT DISTINCT SCHOOL_YEAR                          │
+│   │     FROM HQ_CODE_XNXQ                                   │
+│   │     WHERE TO_NUMBER(SUBSTR(BEGIN_DATE, 1, 4)) <= 2023   │
+│   │       AND TO_NUMBER(SUBSTR(END_DATE, 1, 4)) >= 2023     │
+│   │   )                                                      │
+│   ├── 方式2：明确指定两个学期                                 │
+│   │   WHERE (SCHOOL_YEAR = '2022-2023' AND TERM_CODE = '02')│
+│   │     OR (SCHOOL_YEAR = '2023-2024' AND TERM_CODE = '01') │
+│   └── 方式3：从 HQ_JX_MAJOR_COURSE 表查询（YEAR_ 字段是自然年）│
+│       WHERE YEAR_ = 2023                                     │
+│                                                             │
+└─────────────────────────────────────────────────────────────┘
+```
+
+**学年相关字段对比**：
+
+| 字段名 | 表名 | 格式 | 说明 |
+|--------|------|------|------|
+| SCHOOL_YEAR | HQ_JX_KCB, HQ_JX_JXZ | "2023-2024" | 学年格式 |
+| YEAR_ | HQ_JX_MAJOR_COURSE | 2023 | 自然年格式 |
+| ENROLL_YEAR | HQ_XS_STU | "2024" | 入学年份（字符串） |
+| ENROLL_GRADE | HQ_XS_STU | "2024" | 入学年级（字符串）⚠️ |
+
+**错误案例**：
+```sql
+-- ❌ 错误：学年格式错误
+WHERE SCHOOL_YEAR = '2023'  -- 不存在这样的学年
+
+-- ✅ 正确：使用完整学年格式
+WHERE SCHOOL_YEAR = '2023-2024'
+
+-- ❌ 错误：使用了错误的字段
+WHERE ENROLL_YEAR = '2024'  -- 应该用 ENROLL_GRADE
+
+-- ✅ 正确：使用 ENROLL_GRADE 查询入学年级
+WHERE ENROLL_GRADE = '2024'
+```
+
 #### 2.2 实体类型 → 表映射
 
 | 用户表达 | 语义识别 | 主表 | 关键字段 |
@@ -145,7 +205,71 @@
 | "上课班级" | 课表中的教学班 | HQ_JX_KCB | 使用 `TEACHCLASS_NAME` 字段 |
 | "行政班" | 学生行政班级 | HQ_CODE_CLASSES | `ISTRUE = 1` |
 | "学籍异动/休学/退学" | 历史变更记录 | HQ_XS_CHANGE | 不加ISTRUE（历史数据） |
-| "获奖/荣誉" | 历史记录 | HQ_RS_TEACH_RES/HQ_RS_HONOR_RES | 不加ISTRUE（历史数据） |
+
+#### 2.2.1 荣誉/成果表区分（🔥 极重要！）
+
+⚠️ **核心概念**：有三个不同的表存储荣誉/成果相关数据，用途不同
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                   荣誉/成果表区分                             │
+├─────────────────────────────────────────────────────────────┤
+│                                                             │
+│   1. HQ_RS_TEACH_RES（教学成果奖）                          │
+│   ├── 用途：教学成果奖项（教师为主）                         │
+│   ├── 关键字段：JX_NAME(奖项名称)、DATE_(获奖时间)          │
+│   ├── 关联表：HQ_RS_TEACH_RES_CY（参与人员）               │
+│   └── 场景："教学成果奖"、"教学成果类奖项"                   │
+│                                                             │
+│   2. HQ_RS_HONOR_RES（个人/团队荣誉成果）                   │
+│   ├── 用途：教职工个人或团队获得的荣誉                       │
+│   ├── 关键字段：JX_NAME(荣誉名称)、DATE_(获奖时间)          │
+│   ├── 关联：通过 DEPT_ID 关联到部门                         │
+│   └── 场景："护理学院的荣誉成果"、"某年获取的荣誉"           │
+│                                                             │
+│   3. HQ_JC_XX_RY（学校荣誉/学校级别荣誉）                   │
+│   ├── 用途：以学校为单位获得的国家级等荣誉                   │
+│   ├── 关键字段：TITLE(标题)、DETAILS(详情)                   │
+│   ├── 关键字段：XXRY_GRADE_CODE(等级：1=国家级)             │
+│   ├── 关键字段：IS_TASK_THE_HEAD(是否牵头单位：1=是)         │
+│   └── 场景："作为牵头单位获得的国家级荣誉"                   │
+│                                                             │
+└─────────────────────────────────────────────────────────────┘
+```
+
+**表名选择决策表**：
+
+| 用户问题 | 正确表名 | 错误表名 | 关键条件 |
+|---------|---------|---------|---------|
+| "教学成果奖" | HQ_RS_TEACH_RES | HQ_RS_HONOR_RES ❌ | JX_NAME, DATE_ |
+| "教学成果类奖项最多的是哪一年" | HQ_RS_TEACH_RES | HQ_RS_HONOR_RES ❌ | SUBSTR(DATE_,1,4) |
+| "某年某学院获取的荣誉成果" | HQ_RS_HONOR_RES | HQ_RS_TEACH_RES ❌ | JOIN HQ_CODE_DEPT |
+| "作为牵头单位获得的国家级荣誉" | HQ_JC_XX_RY | HQ_RS_HONOR_RES ❌ | XXRY_GRADE_CODE='1', IS_TASK_THE_HEAD=1 |
+| "参与人员全部是学生的教学成果奖" | HQ_RS_TEACH_RES | HQ_RS_HONOR_RES ❌ | NOT EXISTS关联HQ_RS_TEACH_RES_CY |
+
+**错误案例对比**：
+```sql
+-- ❌ 错误：查询"作为牵头单位获得的国家级荣誉"用了错误的表
+SELECT * FROM HQ_RS_HONOR_RES
+WHERE HONOR_RES_ID = '010103'  -- 这个表和字段都不对
+
+-- ✅ 正确：使用 HQ_JC_XX_RY 表
+SELECT TITLE, DETAILS, YEAR_MONTH
+FROM HQ_JC_XX_RY
+WHERE XXRY_GRADE_CODE = '1'      -- 国家级
+  AND IS_TASK_THE_HEAD = 1        -- 牵头单位
+ORDER BY YEAR_MONTH DESC
+
+-- ❌ 错误：查询"教学成果奖"用了错误的字段
+SELECT r.NAME_, r.DATE_
+FROM HQ_RS_TEACH_RES r
+-- NAME_ 字段不存在！
+
+-- ✅ 正确：使用 JX_NAME 字段
+SELECT r.JX_NAME, r.DATE_
+FROM HQ_RS_TEACH_RES r
+WHERE SUBSTR(r.DATE_, 1, 4) = '2024'
+```
 
 #### 2.2.1 班级类型判断规则（重要！）
 
@@ -893,11 +1017,12 @@ SELECT * FROM HQ_RS_HONOR_RES WHERE ...  -- 这是荣誉成果表
 ❌ 字符串用双引号：WHERE NAME_ LIKE "%孙%"
 ```
 
-### 分页（重要：禁止使用FETCH FIRST）
+### 分页（🔥 禁止使用FETCH FIRST）
 ```
-⚠️ 该Oracle版本不支持 FETCH FIRST 语法
+⚠️ 该Oracle版本不支持 FETCH FIRST 语法（绝对禁止！）
 
 ❌ 错误：FETCH FIRST 3 ROWS ONLY
+❌ 错误：FETCH FIRST 5 ROWS ONLY
 ❌ 错误：FETCH FIRST 1 ROW ONLY
 
 ✅ 正确：WHERE ROWNUM <= 3
@@ -908,6 +1033,39 @@ SELECT * FROM HQ_RS_HONOR_RES WHERE ...  -- 这是荣誉成果表
    ) WHERE ROWNUM <= 3
 
 ❌ LIMIT n (MySQL语法)
+```
+
+### WEEKS 字段的特殊处理（🔥 极重要！）
+```
+⚠️ 课表中的 WEEKS 字段存储的是周次范围字符串，如："1-5,10-15,20"
+⚠️ 不能使用等号精确匹配，必须使用 LIKE 模糊匹配或 JOIN 方式
+
+❌ 错误：WHERE k.WEEKS = (SELECT WEEK FROM HQ_JX_JXZ_DAY WHERE DATE_ = '2024-05-17')
+   -- 如果WEEKS="1-5,10-15"，此查询会失败
+
+✅ 正确方式1：使用 LIKE 模糊匹配
+   WHERE k.WEEKS LIKE '%' || (SELECT WEEK FROM HQ_JX_JXZ_DAY WHERE DATE_ = '2024-05-17') || '%'
+
+✅ 正确方式2：使用 JOIN HQ_JX_JXZ_DAY 关联查询（推荐）
+   JOIN HQ_JX_JXZ_DAY d ON k.WEEKS LIKE '%' || d.WEEK || '%'
+   WHERE d.DATE_ = '2024-05-17'
+
+✅ 正确方式3：使用 INSTR 函数
+   WHERE INSTR(k.WEEKS, (SELECT WEEK FROM HQ_JX_JXZ_DAY WHERE DATE_ = '2024-05-17')) > 0
+```
+
+**典型场景**：
+```sql
+-- 场景1：查询某日期某教室的排课信息
+SELECT k.TEACHCLASS_NAME, k.COURSE_CODE, k.PERIOD, t.NAME_
+FROM HQ_JX_KCB k
+JOIN HQ_JC_JS_ZZJG r ON k.CLASSROOM_ID = r.ID
+JOIN HQ_JX_JXZ_DAY d ON k.WEEKS LIKE '%' || d.WEEK || '%'
+LEFT JOIN HQ_JX_KCB_TEA kt ON k.ID = kt.KCB_ID
+LEFT JOIN HQ_RS_TEA t ON kt.TEA_NO = t.TEA_NO
+WHERE r.NAME_ = '1号教学楼211室'
+  AND d.DATE_ = '2024-05-17'
+  AND k.DAY_OF_WEEK = d.DAY_OF_WEEK
 ```
 
 ### 日期
@@ -1086,6 +1244,10 @@ list_tables() 和 describe_table() 可并行调用
 - [ ] **🔗 表关联检查：只关联用户问题明确要求的表，避免关联无用表导致数据重复**
 - [ ] **Oracle语法检查：禁止使用FETCH FIRST，必须使用ROWNUM**
 - [ ] **COUNT语法检查：必须使用COUNT(*)，不能使用COUNT()**
+- [ ] **📅 WEEKS字段检查：查询日期课表时使用LIKE模糊匹配，不用等号**
+- [ ] **🎓 学年格式检查：SCHOOL_YEAR格式为"YYYY-YYYY"，不是单独年份**
+- [ ] **🏆 荣誉表检查：教学成果用HQ_RS_TEACH_RES，部门荣誉用HQ_RS_HONOR_RES，学校荣誉用HQ_JC_XX_RY**
+- [ ] **👨‍🎓 ENROLL_GRADE检查：查询年级使用ENROLL_GRADE，不用ENROLL_YEAR**
 - [ ] SQL 语法正确（Oracle 规范）
 - [ ] 表名和字段名已验证存在
 - [ ] **ISTRUE检查：所有表都加了 ISTRUE = 1 条件**（基于语义判断）
@@ -1094,7 +1256,6 @@ list_tables() 和 describe_table() 可并行调用
 - [ ] **直接使用用户输入：WHERE条件使用名称而不是硬编码ID**
 - [ ] **连续性判断：涉及"连续N年/学期"时使用了LAG窗口函数**
 - [ ] **日期处理：日期到周次转换使用HQ_JX_JXZ_DAY表**
-- [ ] **表名准确性：荣誉成果用HQ_RS_HONOR_RES，教学成果用HQ_RS_TEACH_RES**
 - [ ] **学籍异动代码：休学用'11'，退学用'03'**
 - [ ] 字符串使用单引号
 - [ ] 代码字段关联了代码表
