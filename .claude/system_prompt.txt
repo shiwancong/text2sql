@@ -1244,10 +1244,12 @@ list_tables() 和 describe_table() 可并行调用
 - [ ] **🔗 表关联检查：只关联用户问题明确要求的表，避免关联无用表导致数据重复**
 - [ ] **Oracle语法检查：禁止使用FETCH FIRST，必须使用ROWNUM**
 - [ ] **COUNT语法检查：必须使用COUNT(*)，不能使用COUNT()**
-- [ ] **📅 WEEKS字段检查：查询日期课表时使用LIKE模糊匹配，不用等号**
+- [ ] **📅 WEEKS字段检查：查询日期课表时优先使用HQ_JX_KCB_PERIOD表，或用LIKE不用等号**
 - [ ] **🎓 学年格式检查：SCHOOL_YEAR格式为"YYYY-YYYY"，不是单独年份**
 - [ ] **🏆 荣誉表检查：教学成果用HQ_RS_TEACH_RES，部门荣誉用HQ_RS_HONOR_RES，学校荣誉用HQ_JC_XX_RY**
 - [ ] **👨‍🎓 ENROLL_GRADE检查：查询年级使用ENROLL_GRADE，不用ENROLL_YEAR**
+- [ ] **🆕 NULL值检查：NATION_CODE判断必须加IS NOT NULL条件**
+- [ ] **🆕 班级名称检查：用户输入简写时使用关键词拆分匹配或子查询**
 - [ ] SQL 语法正确（Oracle 规范）
 - [ ] 表名和字段名已验证存在
 - [ ] **ISTRUE检查：所有表都加了 ISTRUE = 1 条件**（基于语义判断）
@@ -1262,6 +1264,46 @@ list_tables() 和 describe_table() 可并行调用
 - [ ] 布尔值正确转换
 - [ ] 结果格式化清晰
 - [ ] 空结果有说明
+
+---
+
+### 2026-03-06 新增检查项详解
+
+#### 1. NULL值检查（针对NATION_CODE字段）
+
+**问题场景**：查询少数民族教职工时，NULL的NATION_CODE被错误统计
+
+**检查规则**：
+```
+涉及 NATION_CODE 条件判断时：
+❌ 错误：WHERE NATION_CODE != '01'
+✅ 正确：WHERE NATION_CODE IS NOT NULL AND NATION_CODE != '01'
+```
+
+#### 2. 班级名称检查（针对用户简写输入）
+
+**问题场景**：用户说"2022大数据P02班"，实际是"2022大数据技术P02班"
+
+**检查规则**：
+```
+用户输入班级名称是简写时：
+❌ 错误：WHERE cls.NAME_ LIKE '%2022大数据P02班%'
+✅ 正确：使用关键词拆分或子查询
+  WHERE cls.NAME_ LIKE '%2022%'
+    AND (cls.NAME_ LIKE '%大数据%' OR cls.NAME_ LIKE '%大数据技术%')
+    AND cls.NAME_ LIKE '%P02%'
+```
+
+#### 3. 日期课表检查（优先使用HQ_JX_KCB_PERIOD表）
+
+**问题场景**：查询具体日期的课程时使用错误的表
+
+**检查规则**：
+```
+有具体日期（如2024-05-17）时：
+❌ 错误：使用 HQ_JX_KCB 表 + WEEKS = （子查询）
+✅ 正确：使用 HQ_JX_KCB_PERIOD 表 + DATE_ = '2024-05-17'
+```
 
 ---
 

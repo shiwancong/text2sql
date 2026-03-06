@@ -398,13 +398,159 @@ HQ_JX_KCB → HQ_JX_KCB_TEA → HQ_RS_TEA (教师)
 
 - [ ] 是否使用了 `FETCH FIRST`？→ 改用 `ROWNUM`
 - [ ] 表别名是否一致？
-- [ ] WEEKS 字段是否使用了 `=`？→ 改用 `LIKE` 或 JOIN
+- [ ] WEEKS 字段是否使用了 `=`？→ 改用 `LIKE` 或使用 `HQ_JX_KCB_PERIOD` 表
 - [ ] 查询行政班是否使用了 `HQ_JX_TEACHCLASS_XZB`？
 - [ ] 学年格式是否正确（`YYYY-YYYY`）？
 - [ ] 是否使用了正确的表名（如 `HQ_JC_XX_RY` 而非 `HQ_RS_HONOR_RES`）？
 - [ ] 所有 JOIN 的表是否都添加了 `ISTRUE = 1`？
 - [ ] 学生查询是否使用了 `ENROLL_GRADE` 而非 `ENROLL_YEAR`？
 - [ ] 退学学生查询是否返回详细信息而非仅数量？
+- [ ] **🆕 班级名称是否使用了子查询先获取准确名称？**
+- [ ] **🆕 NATION_CODE 判断是否加了 IS NOT NULL 条件？**
+- [ ] **🆕 具体日期查询是否优先使用 HQ_JX_KCB_PERIOD 表？**
+
+---
+
+## 2026-03-06 新增错误修复案例
+
+### 问题 11: 班级名称简写导致查询不到结果（题目5）
+
+**错误现象**：题目"2023-2024学年第2学期2022大数据P02班上了哪些课程"查询结果为0条
+
+**错误代码**：
+```sql
+-- ❌ 错误：直接使用用户简写进行单一模糊匹配
+SELECT DISTINCT c.NAME_ AS 课程名称
+FROM HQ_JX_TEACHCLASS tc
+JOIN HQ_CODE_COURSE c ON tc.COURSE_CODE = c.CODE_
+JOIN HQ_JX_TEACHCLASS_XZB xzb ON tc.ID = xzb.TEACHCLASS_ID
+JOIN HQ_CODE_CLASSES cls ON xzb.CLASS_ID = cls.ID
+WHERE cls.NAME_ LIKE '%2022大数据P02班%'  -- 单一匹配模式
+  AND tc.SCHOOL_YEAR = '2023-2024'
+  AND tc.TERM_CODE = '02'
+  AND tc.ISTRUE = 1
+
+-- 问题：数据库中实际班级名是"2022大数据技术P02班"
+-- 用户输入"2022大数据P02班"导致匹配失败
+```
+
+**修复方法**：
+```sql
+-- ✅ 正确：使用关键词拆分组合匹配 + 子查询
+SELECT DISTINCT c.NAME_ AS 课程名称
+FROM HQ_JX_TEACHCLASS tc
+JOIN HQ_CODE_COURSE c ON tc.COURSE_CODE = c.CODE_
+JOIN HQ_JX_TEACHCLASS_XZB xzb ON tc.ID = xzb.TEACHCLASS_ID AND xzb.ISTRUE = 1
+JOIN HQ_CODE_CLASSES cls ON xzb.CLASS_ID = cls.ID AND cls.ISTRUE = 1
+WHERE cls.ID IN (
+    -- 子查询：先用宽松匹配找到可能的班级
+    SELECT ID FROM HQ_CODE_CLASSES
+    WHERE NAME_ LIKE '%2022%'
+      AND (NAME_ LIKE '%大数据%' OR NAME_ LIKE '%大数据技术%')
+      AND NAME_ LIKE '%P02%'
+      AND ISTRUE = 1
+)
+AND tc.SCHOOL_YEAR = '2023-2024'
+AND tc.TERM_CODE = '02'
+AND tc.ISTRUE = 1
+```
+
+**关键点**：
+1. 用户输入的班级名可能是简写（如"大数据"→"大数据技术"）
+2. 使用关键词拆分：`LIKE '%2022%' AND LIKE '%大数据%' AND LIKE '%P02%'`
+3. 添加 OR 条件覆盖可能的全称：`LIKE '%大数据%' OR LIKE '%大数据技术%'`
+
+---
+
+### 问题 12: NATION_CODE NULL值被统计为少数民族（题目6）
+
+**错误现象**：查询少数民族教职工比例时，NULL值被错误统计为少数民族
+
+**错误代码**：
+```sql
+-- ❌ 错误：没有显式判断NULL值
+SELECT
+    COUNT(CASE WHEN t.NATION_CODE != '01' THEN 1 END) AS 少数民族人数,
+    COUNT(*) AS 总人数,
+    ROUND(COUNT(CASE WHEN t.NATION_CODE != '01' THEN 1 END) * 100.0 / COUNT(*), 2) AS 比例
+FROM HQ_RS_TEA t
+WHERE t.IS_NORMAL = 1
+
+-- 问题：NATION_CODE = NULL 的记录被 != '01' 条件匹配
+-- NULL != '01' 的结果是 NULL（非TRUE），但在某些情况下会被统计
+-- 结果：期望20人(0.8%)，实际23人(0.64%)，多统计了3个NULL值
+```
+
+**修复方法**：
+```sql
+-- ✅ 正确：显式判断NULL值
+SELECT
+    COUNT(CASE WHEN t.NATION_CODE IS NOT NULL AND t.NATION_CODE != '01' THEN 1 END) AS 少数民族人数,
+    COUNT(*) AS 总人数,
+    ROUND(COUNT(CASE WHEN t.NATION_CODE IS NOT NULL AND t.NATION_CODE != '01' THEN 1 END) * 100.0 / COUNT(*), 2) AS 比例
+FROM HQ_RS_TEA t
+WHERE t.IS_NORMAL = 1
+```
+
+**关键点**：
+1. `NATION_CODE = '01'` 表示汉族
+2. `NATION_CODE IS NULL` 表示未填报民族信息
+3. NULL 不等于任何值，包括 '01'，所以 `NULL != '01'` 结果是 NULL（非TRUE）
+4. 正确的少数民族判断：`NATION_CODE IS NOT NULL AND NATION_CODE != '01'`
+
+---
+
+### 问题 13: WEEKS字段类型转换错误（题目20）
+
+**错误现象**：查询具体日期的课程时，使用 WEEKS 字段等号比较导致 ORA-01722 错误
+
+**错误代码**：
+```sql
+-- ❌ 错误：对字符串类型的WEEKS字段使用等号比较
+SELECT k.TEACHCLASS_NAME, k.COURSE_CODE, k.PERIOD, t.NAME_
+FROM HQ_JX_KCB k
+JOIN HQ_JC_JS_ZZJG r ON k.CLASSROOM_ID = r.ID
+WHERE k.WEEKS = (SELECT WEEK FROM HQ_JX_JXZ_DAY WHERE DATE_ = '2024-05-17')
+  AND k.DAY_OF_WEEK = (SELECT DAY_OF_WEEK FROM HQ_JX_JXZ_DAY WHERE DATE_ = '2024-05-17')
+  AND r.NAME_ = '1号教学楼211室'
+
+-- 问题：WEEKS 字段是字符串类型（如"1-18"），不能直接与数字用等号比较
+-- 错误：ORA-01722: 无效数字
+```
+
+**修复方法**：
+```sql
+-- ✅ 推荐：使用 HQ_JX_KCB_PERIOD 表（有具体日期字段）
+SELECT
+    kp.TEACHCLASS_NAME AS 班级名称,
+    c.NAME_ AS 课程名称,
+    kp.PERIOD AS 节次,
+    t.NAME_ AS 教师姓名
+FROM HQ_JX_KCB_PERIOD kp
+LEFT JOIN HQ_CODE_COURSE c ON kp.COURSE_CODE = c.CODE_
+LEFT JOIN HQ_JX_KCB_PERIOD_TEA kpt ON kp.ID = kpt.KCB_PERIOD_ID
+LEFT JOIN HQ_RS_TEA t ON kpt.TEA_NO = t.TEA_NO
+LEFT JOIN HQ_JC_JS_ZZJG js ON kp.CLASSROOM_ID = js.ID
+WHERE kp.DATE_ = '2024-05-17'
+  AND js.NAME_ = '1号教学楼211室'
+  AND kp.ISTRUE = 1
+
+-- ✅ 备选：如果必须用 HQ_JX_KCB 表，使用 LIKE 模糊匹配
+SELECT k.TEACHCLASS_NAME, k.COURSE_CODE, k.PERIOD, t.NAME_
+FROM HQ_JX_KCB k
+JOIN HQ_JC_JS_ZZJG r ON k.CLASSROOM_ID = r.ID
+JOIN HQ_JX_JXZ_DAY d ON k.WEEKS LIKE '%' || d.WEEK || '%'
+LEFT JOIN HQ_JX_KCB_TEA kt ON k.ID = kt.KCB_ID
+LEFT JOIN HQ_RS_TEA t ON kt.TEA_NO = t.TEA_NO
+WHERE r.NAME_ = '1号教学楼211室'
+  AND d.DATE_ = '2024-05-17'
+  AND k.DAY_OF_WEEK = d.DAY_OF_WEEK
+```
+
+**关键点**：
+1. HQ_JX_KCB.WEEKS 字段是字符串类型，存储格式如 "1-18"、"1-5,10-15"
+2. 有具体日期时，优先使用 HQ_JX_KCB_PERIOD 表（有 DATE_ 字段）
+3. 必须使用 HQ_JX_KCB 表时，用 LIKE 模糊匹配：`LIKE '%' || week || '%'`
 
 ---
 

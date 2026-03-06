@@ -388,48 +388,42 @@ SELECT WEEK AS 周次, DATE_ AS 日期, DAY_OF_WEEK AS 星期, SCHOOL_YEAR AS �
 - 类型: 多表
 - 期望执行的SQL
 ```sql
- SELECT DISTINCT
-   cr.NAME_ AS 课程名称,
-   cr.CODE_ AS 课程代码
- FROM HQ_JX_KCB k
-        LEFT JOIN HQ_CODE_COURSE cr ON k.COURSE_CODE = cr.CODE_
- WHERE k.TEACHCLASS_NAME LIKE '%2022大数据P02班%'
-   AND k.SCHOOL_YEAR = '2023-2024'
-   AND k.TERM_CODE = '02'
-   AND k.ISTRUE = 1
-   AND cr.ISTRUE = 1
- ORDER BY cr.NAME_
+
+-- 先查准确班级ID
+SELECT ID, NAME_ FROM HQ_CODE_CLASSES
+WHERE NAME_ LIKE '%2022%' AND (NAME_ LIKE '%大数据%' OR NAME_ LIKE '%大数据技术%') AND NAME_ LIKE '%P02%' AND ISTRUE = 1;
+
+-- 再查课程
+ SELECT DISTINCT c.NAME_ AS 课程名称, c.CODE_ AS 课程代码
+ FROM HQ_JX_TEACHCLASS tc
+        JOIN HQ_CODE_COURSE c ON tc.COURSE_CODE = c.CODE_
+        JOIN HQ_JX_TEACHCLASS_XZB xzb ON tc.ID = xzb.TEACHCLASS_ID AND xzb.ISTRUE = 1
+ WHERE xzb.CLASS_ID = '220408'
+   AND tc.SCHOOL_YEAR = '2023-2024'
+   AND tc.TERM_CODE = '02'
+   AND tc.ISTRUE = 1
+ ORDER BY c.NAME_;
 
 ```
 - 结果
-  ┌────────────────────────────────┬──────────────────┐
-  │          课程名称              │    课程代码     │
-  ├────────────────────────────────┼──────────────────┤
-  │ EXCEL在财务管理中的应用        │ Z30BZ02704      │
-  ├────────────────────────────────┼──────────────────┤
-  │ 财务机器人应用                 │ Z30CZ01304      │
-  ├────────────────────────────────┼──────────────────┤
-  │ 财务与商业数据可视化分析        │ Z30BZ01904      │
-  ├────────────────────────────────┼──────────────────┤
-  │ 管理会计                       │ Z30BZ02703      │
-  ├────────────────────────────────┼──────────────────┤
-  │ 金融学基础                     │ Z30AZ00404      │
-  ├────────────────────────────────┼──────────────────┤
-  │ 经济学基础                     │ Z30AJ00503      │
-  ├────────────────────────────────┼──────────────────┤
-  │ 市场营销                       │ Z30BZ02304      │
-  ├────────────────────────────────┼──────────────────┤
-  │ 税收筹划                       │ Z30BZ03014      │
-  ├────────────────────────────────┼──────────────────┤
-  │ 习近平新时代中国特色社会主义思想概论  │ GDY00104       │
-  ├────────────────────────────────┼──────────────────┤
-  │ 智能财务系统                   │ Z30BZ01104      │
-  ├────────────────────────────────┼──────────────────┤
-  │ 智能会计岗位实训               │ Z30CZ01204      │
-  └────────────────────────────────┴──────────────────┘
-
-  共11门课程
-
+  ┌──────────────────────────────────────┬────────────┐
+  │               课程名称               │  课程代码  │
+  ├──────────────────────────────────────┼────────────┤
+  │ Flink大数据实时分析                  │ Z80BZ01701 │
+  ├──────────────────────────────────────┼────────────┤
+  │ Spark技术与应用                      │ Z80BZ01601 │
+  ├──────────────────────────────────────┼────────────┤
+  │ 大数据分析与应用                     │ Z80BZ01301 │
+  ├──────────────────────────────────────┼────────────┤
+  │ 大数据可视化                         │ Z80BZ01501 │
+  ├──────────────────────────────────────┼────────────┤
+  │ 大数据库                             │ Z80BZ00801 │
+  ├──────────────────────────────────────┼────────────┤
+  │ 互联网+大数据综合应用实训            │ Z80BZ01401 │
+  ├──────────────────────────────────────┼────────────┤
+  │ 习近平新时代中国特色社会主义思想概论 │ GDY00104   │
+  └──────────────────────────────────────┴────────────┘
+  共 7 门课程
 
 
 > 我校夏季第2-5节课的上课开始结束时间
@@ -462,23 +456,21 @@ SELECT WEEK AS 周次, DATE_ AS 日期, DAY_OF_WEEK AS 星期, SCHOOL_YEAR AS �
 - 类型: 单表, 聚合
 - 期望执行的SQL
 ```sql
- SELECT
-   COUNT(CASE WHEN t.NATION_CODE != '01' THEN 1 END) AS 少数民族人数,
-   COUNT(*) AS 总人数,
-   ROUND(COUNT(CASE WHEN t.NATION_CODE != '01' THEN 1 END) * 100.0 / COUNT(*), 2) AS 少数民族比例
- FROM HQ_RS_TEA t
- WHERE t.IS_NORMAL = 1
+
+SELECT
+  COUNT(CASE WHEN t.NATION_CODE IS NOT NULL AND t.NATION_CODE != '01' THEN 1 END) AS 少数民族人数,
+  COUNT(*) AS 总人数,
+  ROUND(COUNT(CASE WHEN t.NATION_CODE IS NOT NULL AND t.NATION_CODE != '01' THEN 1 END) * 100.0 / COUNT(*), 2) AS 比例
+FROM HQ_RS_TEA t
+WHERE t.IS_NORMAL = 1;
 ```
 - 结果
 
-  ┌──────────────┬──────────┬──────────────┐
-  │ 少数民族人数 │ 总人数   │ 少数民族比例 │
-  ├──────────────┼──────────┼──────────────┤
-  │      23      │   3591   │     0.64     │
-  └──────────────┴──────────┴──────────────┘
-
-  我校少数民族教职工23人，占总人数的0.64%
-
+┌──────────────┬────────┬──────┐
+│ 少数民族人数 │ 总人数 │ 比例 │
+├──────────────┼────────┼──────┤
+│ 20           │ 2515   │ 0.8  │
+└──────────────┴────────┴──────┘
 
 > 查询2024年参与人员全部是学生的教学成果奖ID、奖项名称、获奖时间
 - 分级:B
@@ -1194,26 +1186,26 @@ WHERE '2024-05-17' BETWEEN BEGIN_DATE AND END_DATE;
 - 类型: 多表, 聚合
 - 期望执行的SQL
 ```sql
-SELECT
-  k.TEACHCLASS_NAME AS 班级,
-  cr.NAME_ AS 课程,
-  k.PERIOD AS 节次,
-  t.NAME_ AS 教师
-FROM HQ_JC_JS_ZZJG r
-       JOIN HQ_JX_KCB k ON k.CLASSROOM_ID = r.ID
-       LEFT JOIN HQ_CODE_COURSE cr ON k.COURSE_CODE = cr.CODE_
-       LEFT JOIN HQ_JX_KCB_TEA kt ON k.ID = kt.KCB_ID
-       LEFT JOIN HQ_RS_TEA t ON kt.TEA_NO = t.TEA_NO
-WHERE r.NAME_ = '1号教学楼211室'
-  AND k.WEEKS = (SELECT WEEK FROM HQ_JX_JXZ_DAY WHERE DATE_ = '2024-05-17')
-  AND k.DAY_OF_WEEK = (SELECT DAY_OF_WEEK FROM HQ_JX_JXZ_DAY WHERE DATE_ = '2024-05-17')
-ORDER BY k.PERIOD
+● SELECT
+    kp.TEACHCLASS_NAME AS 上课班级,
+    c.NAME_ AS 课程,
+    kp.PERIOD AS 节次,
+    t.NAME_ AS 教师
+  FROM HQ_JX_KCB_PERIOD kp
+         LEFT JOIN HQ_JC_JS_ZZJG js ON kp.CLASSROOM_ID = js.ID AND js.ISTRUE = 1
+         LEFT JOIN HQ_CODE_COURSE c ON kp.COURSE_CODE = c.CODE_ AND c.ISTRUE = 1
+         LEFT JOIN HQ_JX_KCB_PERIOD_TEA kpt ON kp.ID = kpt.KCB_PERIOD_ID AND kpt.ISTRUE = 1
+         LEFT JOIN HQ_RS_TEA t ON kpt.TEA_NO = t.TEA_NO
+  WHERE kp.DATE_ = '2024-05-17'
+    AND js.NAME_ = '1号教学楼211室'
+    AND kp.ISTRUE = 1
+  ORDER BY kp.BEGIN_PERIOD
 ```
 - 结果
-  ┌───────────────────────────────────────┬─────────────────────────┬─────────┬───────────┐
-  │               班级                    │         课程            │  节次   │   教师    │
-  ├───────────────────────────────────────┼─────────────────────────┼─────────┼───────────┤
-  │ 2022大数据与财务管理P01班            │ EXCEL在财务管理中的应用 │  1-2    │ 刘媛媛    │
-  ├───────────────────────────────────────┼─────────────────────────┼─────────┼───────────┤
-  │ 2022大数据与财务管理P02班            │ 财务机器人应用          │  3-4    │ 张丽      │
-  └───────────────────────────────────────┴─────────────────────────┴─────────┴───────────┘
+  ┌──────────────────────────────────────┬───────────────┬──────┬────────┐
+  │               上课班级               │     课程      │ 节次 │  教师  │
+  ├──────────────────────────────────────┼───────────────┼──────┼────────┤
+  │ 夏季高考2023机械制造及自动化P[1-2]班 │ 形势与政策    │ 3-4  │ 马任飞 │
+  ├──────────────────────────────────────┼───────────────┼──────┼────────┤
+  │ 夏季高考2023机械制造及自动化P[1-2]班 │ 高职英语（A） │ 7-8  │ 许玉霞 │
+  └──────────────────────────────────────┴───────────────┴──────┴────────┘

@@ -131,7 +131,7 @@
 | 入学年份 | Enroll Year | 入学年 | HQ_XS_STU.ENROLL_YEAR |
 | 民族 | Ethnicity | 学生民族 | HQ_XS_STU.NATION_CODE |
 | 性别 | Sex/Gender | 性别 | HQ_XS_STU.SEX_CODE (1-男，2-女) |
-| 少数民族 | Minority | 非汉族民族 | NATION_CODE != '01' (01为汉族) |
+| 少数民族 | Minority | 非汉族民族 | NATION_CODE IS NOT NULL AND NATION_CODE != '01' (01为汉族，NULL表示未填报) |
 | 学生状态 | Student State | 在读/休学/毕业 | HQ_XS_STU.STU_STATE_CODE |
 | 在校学生 | Normal Student | 正常在校 | HQ_XS_STU.IS_NORMAL = 1 |
 | 培养层次 | PYCC | 专科/本科/研究生 | HQ_XS_STU.PYCC_CODE |
@@ -241,12 +241,30 @@
 当用户使用以下术语时，参考此文档：
 
 - "理实一体课" → HQ_CODE_COURSE.COURSE_TYPE_CODE 查找对应类型
-- "少数民族" → HQ_XS_STU.NATION_CODE != '01' (01为汉族)
+- "少数民族" → NATION_CODE IS NOT NULL AND NATION_CODE != '01' (01为汉族，NULL表示未填报，不应算作少数民族)
 - "本学期" → HQ_CODE_XNXQ 按 BEGIN_DATE DESC 取最新记录
 - "专业负责人" → HQ_CODE_MAJOR.FZR_NO 关联 HQ_RS_TEA.TEA_NO
 - "部门负责人" → HQ_CODE_DEPT.FZR_NO 关联 HQ_RS_TEA.TEA_NO
 - "学期范围" → HQ_CODE_XNXQ.TEACH_BEGIN_DATE 到 TEACH_END_DATE
 - "学校名称" → HQ_JC_XX.NAME_
+
+---
+
+## 重要注意事项
+
+### NULL值处理（🔥 极重要！）
+
+当查询涉及可能为NULL的字段时（如NATION_CODE），必须显式处理NULL值：
+
+| 场景 | 错误做法 | 正确做法 |
+|------|---------|---------|
+| 查询少数民族 | `WHERE NATION_CODE != '01'` | `WHERE NATION_CODE IS NOT NULL AND NATION_CODE != '01'` |
+| 计算少数民族比例 | `COUNT(CASE WHEN NATION_CODE != '01' THEN 1 END)` | `COUNT(CASE WHEN NATION_CODE IS NOT NULL AND NATION_CODE != '01' THEN 1 END)` |
+
+**原因**：
+- NULL != '01' 的结果是 NULL（非TRUE）
+- 在某些聚合场景下，NULL可能被错误统计
+- NULL 表示未填报/未知，不应算作少数民族
 
 ---
 

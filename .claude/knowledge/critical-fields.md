@@ -183,37 +183,62 @@ WHERE s.ENROLL_GRADE = '2024'
 
 ### WEEKS（周次范围字段）
 
-⚠️ **极重要**：HQ_JX_KCB 表的 WEEKS 字段存储的是周次范围字符串，不能使用等号精确匹配
+⚠️ **极重要**：查询具体日期的课程时，应优先使用 HQ_JX_KCB_PERIOD 表
 
-**字段格式示例**：
+**表选择决策（题目20错误案例）**：
+| 表名 | 字段特点 | 使用场景 |
+|------|---------|---------|
+| **HQ_JX_KCB_PERIOD** | 有 DATE_ 字段（具体日期） | ✅ 题目有具体日期 |
+| HQ_JX_KCB | 有 WEEKS 字段（周次范围字符串） | 题目只有周次，无具体日期 |
+
+**错误案例（题目20）**：
+```sql
+-- ❌ 错误：使用 HQ_JX_KCB 表 + WEEKS 字段等号比较
+SELECT k.TEACHCLASS_NAME, k.COURSE_CODE, k.PERIOD, t.NAME_
+FROM HQ_JX_KCB k
+WHERE k.WEEKS = (SELECT WEEK FROM HQ_JX_JXZ_DAY WHERE DATE_ = '2024-05-17')
+-- 问题1：WEEKS 是字符串（如"1-18"），不能直接用等号比较
+-- 问题2：会导致 ORA-01722 无效数字错误
+```
+
+**正确做法**：
+```sql
+-- ✅ 推荐：使用 HQ_JX_KCB_PERIOD 表（有具体日期字段）
+SELECT
+    kp.TEACHCLASS_NAME AS 班级名称,
+    c.NAME_ AS 课程名称,
+    kp.PERIOD AS 节次,
+    t.NAME_ AS 教师姓名
+FROM HQ_JX_KCB_PERIOD kp
+LEFT JOIN HQ_CODE_COURSE c ON kp.COURSE_CODE = c.CODE_
+LEFT JOIN HQ_JX_KCB_PERIOD_TEA kpt ON kp.ID = kpt.KCB_PERIOD_ID
+LEFT JOIN HQ_RS_TEA t ON kpt.TEA_NO = t.TEA_NO
+LEFT JOIN HQ_JC_JS_ZZJG js ON kp.CLASSROOM_ID = js.ID
+WHERE kp.DATE_ = '2024-05-17'
+  AND js.NAME_ = '1号教学楼211室'
+  AND kp.ISTRUE = 1
+
+-- ✅ 备选方案：如果必须用 HQ_JX_KCB 表，使用 LIKE 模糊匹配
+WHERE k.WEEKS LIKE '%' || (SELECT WEEK FROM HQ_JX_JXZ_DAY WHERE DATE_ = '2024-05-17') || '%'
+```
+
+**查询规则**：
+
+| 用户问题 | 优先表名 | 备选方案 |
+|---------|---------|---------|
+| "某日期某教室的课" | HQ_JX_KCB_PERIOD | HQ_JX_KCB + LIKE |
+| "某周有哪些课" | HQ_JX_KCB | LIKE '%周次%' |
+| "某日课表" | HQ_JX_KCB_PERIOD | - |
+
+**WEEKS 字段格式说明**：
 - `"1-5"` → 第1到5周
 - `"1-5,10-15"` → 第1到5周和第10到15周
 - `"1,3,5,7,9"` → 第1、3、5、7、9周
 
-**查询规则**：
-
-| 用户问题 | 错误做法 | 正确做法 |
-|---------|---------|---------|
-| "某日期某教室的课" | `WHERE k.WEEKS = (SELECT WEEK FROM ...)` | `WHERE k.WEEKS LIKE '%' \|| (SELECT WEEK FROM ...) \|| '%'` |
-| "某周有哪些课" | `WHERE k.WEEKS = '5'` | `WHERE k.WEEKS LIKE '%5%'` |
-
-**推荐方式**：使用 JOIN HQ_JX_JXZ_DAY 表
-
-```sql
--- ✅ 推荐：使用 JOIN 方式
-SELECT k.TEACHCLASS_NAME, k.COURSE_CODE, k.PERIOD, t.NAME_
-FROM HQ_JX_KCB k
-JOIN HQ_JC_JS_ZZJG r ON k.CLASSROOM_ID = r.ID
-JOIN HQ_JX_JXZ_DAY d ON k.WEEKS LIKE '%' || d.WEEK || '%'
-LEFT JOIN HQ_JX_KCB_TEA kt ON k.ID = kt.KCB_ID
-LEFT JOIN HQ_RS_TEA t ON kt.TEA_NO = t.TEA_NO
-WHERE r.NAME_ = '1号教学楼211室'
-  AND d.DATE_ = '2024-05-17'
-  AND k.DAY_OF_WEEK = d.DAY_OF_WEEK
-
--- ❌ 错误：使用等号精确匹配（会失败）
-WHERE k.WEEKS = (SELECT WEEK FROM HQ_JX_JXZ_DAY WHERE DATE_ = '2024-05-17')
-```
+**规则**：
+1. 有具体日期时，优先使用 HQ_JX_KCB_PERIOD 表
+2. 使用 HQ_JX_KCB 表的 WEEKS 字段时，必须用 LIKE 模糊匹配
+3. 禁止对 WEEKS 字段使用等号精确匹配
 
 ---
 
@@ -227,6 +252,92 @@ HQ_RS_TEA表没有ISTRUE字段，但可以通过其他字段判断：
 |------|------|---------|
 | ZW_NAME | 职称 | 查询有职称的教师：`WHERE ZW_NAME IS NOT NULL` |
 | 其他状态字段 | 根据实际情况 | 查看 describe_table 确认 |
+
+### NATION_CODE NULL值处理（🔥 极重要！）
+
+⚠️ **核心概念**：NATION_CODE 字段可能为 NULL，表示未填报民族信息
+
+**错误示例（题目6）**：
+```sql
+-- ❌ 错误：NULL值被统计为少数民族
+SELECT
+    COUNT(CASE WHEN t.NATION_CODE != '01' THEN 1 END) AS 少数民族人数,
+    COUNT(*) AS 总人数
+FROM HQ_RS_TEA t
+WHERE t.IS_NORMAL = 1
+
+-- 问题：NATION_CODE = NULL 的记录被 != '01' 条件匹配，错误计入少数民族
+```
+
+**正确做法**：
+```sql
+-- ✅ 正确：显式处理NULL值
+SELECT
+    COUNT(CASE WHEN t.NATION_CODE IS NOT NULL AND t.NATION_CODE != '01' THEN 1 END) AS 少数民族人数,
+    COUNT(*) AS 总人数
+FROM HQ_RS_TEA t
+WHERE t.IS_NORMAL = 1
+```
+
+**规则**：
+1. 涉及 NATION_CODE 的条件判断时，必须先检查 `IS NOT NULL`
+2. `NATION_CODE = '01'` 表示汉族
+3. `NATION_CODE IS NULL` 表示未填报，不应算作少数民族
+4. 正确的少数民族判断：`NATION_CODE IS NOT NULL AND NATION_CODE != '01'`
+
+---
+
+## 班级相关关键字段
+
+### 班级名称规范化处理（🔥 极重要！）
+
+⚠️ **核心概念**：用户输入的班级名称可能是简写，需要先查询数据库获取准确名称
+
+**错误案例（题目5）**：
+```sql
+-- ❌ 错误：直接使用用户简写进行模糊匹配
+WHERE k.TEACHCLASS_NAME LIKE '%2022大数据P02班%'
+
+-- 问题：数据库中实际班级名是"2022大数据技术P02班"，用户说"2022大数据P02班"
+-- 导致查询不到结果
+```
+
+**正确做法**：
+```sql
+-- ✅ 方式1：先查询准确班级名称，再使用子查询
+SELECT DISTINCT c.NAME_ AS 课程名称
+FROM HQ_JX_TEACHCLASS tc
+JOIN HQ_CODE_COURSE c ON tc.COURSE_CODE = c.CODE_
+JOIN HQ_JX_TEACHCLASS_XZB xzb ON tc.ID = xzb.TEACHCLASS_ID AND xzb.ISTRUE = 1
+JOIN HQ_CODE_CLASSES cls ON xzb.CLASS_ID = cls.ID AND cls.ISTRUE = 1
+WHERE cls.ID IN (
+    SELECT ID FROM HQ_CODE_CLASSES
+    WHERE NAME_ LIKE '%2022%大数据%P02%'  -- 使用更宽松的匹配
+    AND ISTRUE = 1
+)
+AND tc.SCHOOL_YEAR = '2023-2024'
+AND tc.TERM_CODE = '02'
+AND tc.ISTRUE = 1
+
+-- ✅ 方式2：使用多个关键词组合匹配
+WHERE cls.NAME_ LIKE '%2022%'
+AND (cls.NAME_ LIKE '%大数据%' OR cls.NAME_ LIKE '%大数据技术%')
+AND cls.NAME_ LIKE '%P02%'
+```
+
+**规则**：
+1. 用户输入的班级名可能是简写（如"大数据"→"大数据技术"）
+2. 优先使用子查询先获取准确的班级ID
+3. 使用关键词拆分组合匹配：`LIKE '%2022%' AND LIKE '%大数据%' AND LIKE '%P02%'`
+4. 避免使用单一简写词进行精确匹配
+
+**常见班级名称简写对照**：
+| 用户输入 | 可能的完整名称 |
+|---------|---------------|
+| 大数据 | 大数据技术、大数据与财务管理 |
+| 财务 | 财务管理、大数据与财务管理 |
+| 会计 | 会计、会计信息管理 |
+| P02班 | P02班、P02（可能无"班"字） |
 
 ---
 
